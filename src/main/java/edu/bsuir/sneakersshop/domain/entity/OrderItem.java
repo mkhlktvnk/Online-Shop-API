@@ -30,7 +30,7 @@ public class OrderItem {
     private BigDecimal totalPrice;
 
     @PrePersist
-    void calculateTotalPrice() {
+    private void calculateTotalPrice() {
         totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(productPrice);
     }
 }

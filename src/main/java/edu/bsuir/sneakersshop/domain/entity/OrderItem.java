@@ -21,7 +21,7 @@ public class OrderItem {
     private Integer productSize;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal productPrice;
 
     @Column(nullable = false)
     private Integer productQuantity;
@@ -31,6 +31,6 @@ public class OrderItem {
 
     @PrePersist
     void calculateTotalPrice() {
-        totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(price);
+        totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(productPrice);
     }
 }

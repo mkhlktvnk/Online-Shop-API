@@ -15,13 +15,7 @@ public class OrderItem {
     private Long id;
 
     @Column(nullable = false)
-    private String productName;
-
-    @Column(nullable = false)
     private Integer productSize;
-
-    @Column(nullable = false)
-    private BigDecimal productPrice;
 
     @Column(nullable = false)
     private Integer productQuantity;
@@ -29,12 +23,16 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
     @PrePersist
     private void calculateTotalPrice() {
-        totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(productPrice);
+        totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(product.getPrice());
     }
 }

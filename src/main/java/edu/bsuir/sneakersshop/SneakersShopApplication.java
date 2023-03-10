@@ -1,0 +1,13 @@
+package edu.bsuir.sneakersshop;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SneakersShopApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SneakersShopApplication.class, args);
+    }
+
+}

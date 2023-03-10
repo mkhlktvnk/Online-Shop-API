@@ -29,6 +29,10 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @PrePersist
     private void calculateTotalPrice() {
         totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(productPrice);

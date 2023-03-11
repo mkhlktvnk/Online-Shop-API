@@ -33,5 +33,8 @@ public class Product {
     private Brand brand;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
+    private Set<Size> sizes = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private Set<Image> images = new HashSet<>();
 }

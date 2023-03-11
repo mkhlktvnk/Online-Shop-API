@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  database:
+    image: 'postgres:14.1-alpine'
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - backend_network
+
+networks:
+  backend_network:

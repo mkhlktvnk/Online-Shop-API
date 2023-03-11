@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -29,4 +31,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Brand brand;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
+    private Set<Image> images = new HashSet<>();
 }

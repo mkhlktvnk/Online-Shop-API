@@ -1,8 +1,8 @@
 package edu.bsuir.sneakersshop.service;
 
 import edu.bsuir.sneakersshop.domain.entity.Brand;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface BrandService {

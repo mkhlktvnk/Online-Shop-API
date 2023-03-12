@@ -1,9 +1,13 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "sizes")
+@Builder
+@RequiredArgsConstructor
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

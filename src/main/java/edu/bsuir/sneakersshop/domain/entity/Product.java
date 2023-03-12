@@ -12,7 +12,8 @@ import java.util.Set;
 @Table(name = "products")
 @Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @Column(nullable = false)

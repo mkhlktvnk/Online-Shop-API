@@ -2,9 +2,7 @@ package edu.bsuir.sneakersshop.domain.entity;
 
 import edu.bsuir.sneakersshop.domain.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -16,7 +14,8 @@ import java.util.Set;
 @Table(name = "orders")
 @Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -18,15 +18,9 @@ public interface ProductService {
 
     List<Product> findAll(Pageable pageable);
 
-    List<Product> findBySeasonType(SeasonType seasonType);
-
     List<Product> findBySeasonType(SeasonType seasonType, Pageable pageable);
 
-    List<Product> findByPriceBetween(BigDecimal bigDecimal, BigDecimal max);
-
     List<Product> findByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable);
-
-    List<Product> findByBrandId(Long brandId);
 
     List<Product> findByBrandId(Long brandId, Pageable pageable);
 }

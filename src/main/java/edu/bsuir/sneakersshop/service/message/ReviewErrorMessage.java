@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:error-message.properties")
 public class ReviewErrorMessage {
     @Value("classpath:review.not-found.message")
-    private String notFound;
+    private String notFoundMessage;
 }

@@ -1,13 +1,11 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "sizes")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

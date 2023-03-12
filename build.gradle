@@ -14,6 +14,8 @@ repositories {
 
 ext {
 	lombokVersion = "1.18.26"
+	lombokMapstructBindingVersion = "0.2.0"
+	mapstructVersion = "1.5.3.Final"
 }
 
 dependencies {
@@ -28,6 +30,12 @@ dependencies {
 
 	testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
 }
 
 tasks.named('test') {

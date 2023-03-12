@@ -1,7 +1,9 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
+@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,7 @@ package edu.bsuir.sneakersshop.domain.entity;
 
 import edu.bsuir.sneakersshop.domain.enums.SeasonType;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -11,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "products")
 @Data
+@Builder
+@RequiredArgsConstructor
 public class Product {
     @Id
     @Column(nullable = false)

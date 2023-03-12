@@ -1,13 +1,17 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
 @Data
+@Builder
+@RequiredArgsConstructor
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

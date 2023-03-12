@@ -1,9 +1,15 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "brands")
+@Data
+@Builder
+@RequiredArgsConstructor
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,11 +1,15 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "product_images")
 @Data
+@Builder
+@RequiredArgsConstructor
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

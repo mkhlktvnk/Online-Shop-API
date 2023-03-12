@@ -7,8 +7,9 @@ import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.BrandErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 
 @Service
@@ -53,6 +54,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<Brand> findAll(Pageable pageable) {
-        return null;
+        return brandRepository.findAll(pageable).getContent();
     }
 }

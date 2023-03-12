@@ -3,6 +3,7 @@ package edu.bsuir.sneakersshop.service.impl;
 import edu.bsuir.sneakersshop.domain.entity.Brand;
 import edu.bsuir.sneakersshop.domain.repository.BrandRepository;
 import edu.bsuir.sneakersshop.service.BrandService;
+import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.BrandErrorMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public Brand insert(Brand brand) {
-        return null;
+        if (brandRepository.existsByName(brand.getName())) {
+            throw new EntityAlreadyExistsException(brandErrorMessage.getAlreadyExistsMessage());
+        }
+        return brandRepository.save(brand);
     }
 
     @Override

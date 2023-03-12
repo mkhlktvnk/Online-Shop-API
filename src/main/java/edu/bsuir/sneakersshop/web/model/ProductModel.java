@@ -1,6 +1,6 @@
 package edu.bsuir.sneakersshop.web.model;
 
-import edu.bsuir.sneakersshop.domain.entity.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.bsuir.sneakersshop.domain.enums.SeasonType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,17 +15,24 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductModel {
+    @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("name")
     private String name;
 
+    @JsonProperty("description")
     private String description;
 
+    @JsonProperty("price")
     private BigDecimal price;
 
+    @JsonProperty("season")
     private SeasonType seasonType;
 
+    @JsonProperty("images")
     private Set<ImageModel> images;
 
-    private Set<Size> sizes;
+    @JsonProperty("sizes")
+    private Set<SizeModel> sizes;
 }

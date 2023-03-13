@@ -23,4 +23,6 @@ public interface ProductService {
     List<Product> findByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable);
 
     List<Product> findByBrandId(Long brandId, Pageable pageable);
+
+    boolean isExistsById(Long id);
 }

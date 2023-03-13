@@ -68,4 +68,9 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findByBrandId(Long brandId, Pageable pageable) {
         return productRepository.findAllByBrandId(brandId, pageable);
     }
+
+    @Override
+    public boolean isExistsById(Long id) {
+        return productRepository.existsById(id);
+    }
 }

@@ -12,6 +12,8 @@ public interface ReviewService {
 
     List<Review> findByUserId(Long userId, Pageable pageable);
 
+    List<Review> findByProductId(Long productId, Pageable pageable);
+
     Review insert(Review review);
 
     void update(Long id, Review review);

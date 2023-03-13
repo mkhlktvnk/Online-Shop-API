@@ -1,6 +1,5 @@
 package edu.bsuir.sneakersshop.web.controller;
 
-import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.ReviewService;
 import edu.bsuir.sneakersshop.web.mapper.ReviewMapper;
 import edu.bsuir.sneakersshop.web.model.ReviewModel;

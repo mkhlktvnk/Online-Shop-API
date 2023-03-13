@@ -2,8 +2,10 @@ package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.domain.entity.Review;
 import edu.bsuir.sneakersshop.domain.repository.ReviewRepository;
+import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.ReviewService;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.ProductErrorMessage;
 import edu.bsuir.sneakersshop.service.message.ReviewErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ProductService productService;
     private final ReviewErrorMessage reviewErrorMessage;
+    private final ProductErrorMessage productErrorMessage;
 
     @Override
     public Review findOne(Long id) {
@@ -35,6 +39,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> findByProductId(Long productId, Pageable pageable) {
+        if (!productService.isExistsById(productId)) {
+            throw new EntityNotFoundException(productErrorMessage.getNotFoundMessage());
+        }
         return reviewRepository.findAllByProductId(productId, pageable);
     }
 

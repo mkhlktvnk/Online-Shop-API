@@ -34,6 +34,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<Review> findByProductId(Long productId, Pageable pageable) {
+        return reviewRepository.findAllByProductId(productId, pageable);
+    }
+
+    @Override
     public Review insert(Review review) {
         return reviewRepository.save(review);
     }

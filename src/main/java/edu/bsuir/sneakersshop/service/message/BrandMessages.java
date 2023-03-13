@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @PropertySource("classpath:message.properties")
-public class ProductErrorMessage {
-    @Value("classpath:product.not-found.message")
+public class BrandMessages {
+    @Value("classpath:brand.not-found.message")
     private String notFoundMessage;
+
+    @Value("classpath:brand.already-exists.message")
+    private String alreadyExistsMessage;
 }
-
-
-

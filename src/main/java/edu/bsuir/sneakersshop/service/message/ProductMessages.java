@@ -8,7 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @PropertySource("classpath:message.properties")
-public class ReviewErrorMessage {
-    @Value("classpath:review.not-found.message")
+public class ProductMessages {
+    @Value("classpath:product.not-found.message")
     private String notFoundMessage;
 }
+
+
+

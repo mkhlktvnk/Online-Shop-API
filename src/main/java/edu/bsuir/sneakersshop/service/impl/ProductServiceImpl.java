@@ -5,7 +5,7 @@ import edu.bsuir.sneakersshop.domain.enums.SeasonType;
 import edu.bsuir.sneakersshop.domain.repository.ProductRepository;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
-import edu.bsuir.sneakersshop.service.message.ProductErrorMessage;
+import edu.bsuir.sneakersshop.service.message.ProductMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductErrorMessage productErrorMessage;
+    private final ProductMessages productMessages;
 
     @Override
     public Product insert(Product product) {
@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(productErrorMessage.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(productMessages.getNotFoundMessage()));
         productToUpdate.setName(product.getName());
         productToUpdate.setDescription(product.getDescription());
         productToUpdate.setPrice(product.getPrice());
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException(productErrorMessage.getNotFoundMessage());
+            throw new EntityNotFoundException(productMessages.getNotFoundMessage());
         }
         productRepository.deleteById(id);
     }
@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findOne(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(productErrorMessage.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(productMessages.getNotFoundMessage()));
     }
 
     @Override

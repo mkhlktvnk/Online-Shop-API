@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-@PropertySource("classpath:error-message.properties")
+@PropertySource("classpath:message.properties")
 public class BrandErrorMessage {
     @Value("classpath:brand.not-found.message")
     private String notFoundMessage;

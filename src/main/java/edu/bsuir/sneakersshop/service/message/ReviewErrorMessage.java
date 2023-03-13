@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-@PropertySource("classpath:error-message.properties")
+@PropertySource("classpath:message.properties")
 public class ReviewErrorMessage {
     @Value("classpath:review.not-found.message")
     private String notFoundMessage;

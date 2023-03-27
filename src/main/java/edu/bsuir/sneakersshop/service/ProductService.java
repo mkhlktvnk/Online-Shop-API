@@ -2,7 +2,9 @@ package edu.bsuir.sneakersshop.service;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
 import edu.bsuir.sneakersshop.domain.enums.SeasonType;
+import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +18,7 @@ public interface ProductService {
 
     Product findOne(Long id);
 
-    List<Product> findAll(Pageable pageable);
+    List<Product> findAll(Pageable pageable, Specification<Product> specification);
 
     List<Product> findBySeasonType(SeasonType seasonType, Pageable pageable);
 

@@ -8,6 +8,7 @@ import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.ProductMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -50,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable).getContent();
+    public List<Product> findAll(Pageable pageable, Specification<Product> specification) {
+        return productRepository.findAll(specification, pageable).getContent();
     }
 
     @Override

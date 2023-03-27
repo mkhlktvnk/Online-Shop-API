@@ -1,4 +1,4 @@
-package edu.bsuir.sneakersshop.web;
+package edu.bsuir.sneakersshop.web.criteria;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

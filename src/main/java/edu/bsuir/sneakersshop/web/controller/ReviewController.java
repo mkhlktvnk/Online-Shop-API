@@ -4,6 +4,7 @@ import edu.bsuir.sneakersshop.service.ReviewService;
 import edu.bsuir.sneakersshop.web.mapper.ReviewMapper;
 import edu.bsuir.sneakersshop.web.model.ReviewModel;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final ReviewMapper mapper;
+    private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
     @GetMapping("/products/{productId}/reviews")
     public List<ReviewModel> getReviewsByProductId(@PathVariable Long productId, @PageableDefault Pageable pageable) {

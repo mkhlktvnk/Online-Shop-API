@@ -4,7 +4,6 @@ import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
 import edu.bsuir.sneakersshop.web.mapper.ProductMapper;
 import edu.bsuir.sneakersshop.web.model.ProductModel;
-import edu.bsuir.sneakersshop.web.specification.ProductSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -22,8 +21,8 @@ public class ProductController {
     private final ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 
     @GetMapping("/products")
-    public List<ProductModel> getProducts(@PageableDefault Pageable pageable, ProductSpecification specification) {
-        return (List<ProductModel>) mapper.mapToModel(productService.findAll(pageable, specification));
+    public List<ProductModel> getProducts(@PageableDefault Pageable pageable, @Valid ProductCriteria criteria) {
+        return (List<ProductModel>) mapper.mapToModel(productService.findAll(pageable, criteria));
     }
 
     @GetMapping("/products/{id}")

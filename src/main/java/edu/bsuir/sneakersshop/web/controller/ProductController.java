@@ -31,6 +31,7 @@ public class ProductController {
     }
 
     @PostMapping("/products")
+    @ResponseStatus(HttpStatus.CREATED)
     public ProductModel insertProduct(@Valid @RequestBody ProductModel product) {
         return mapper.mapToModel(
                 productService.insert(mapper.mapToEntity(product))

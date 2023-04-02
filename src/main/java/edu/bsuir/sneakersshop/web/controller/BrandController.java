@@ -30,6 +30,7 @@ public class BrandController {
     }
 
     @PostMapping("/brands")
+    @ResponseStatus(HttpStatus.CREATED)
     public BrandModel insertBrand(@Valid @RequestBody BrandModel brand) {
         return mapper.mapToModel(
                 brandService.insert(mapper.mapToEntity(brand))

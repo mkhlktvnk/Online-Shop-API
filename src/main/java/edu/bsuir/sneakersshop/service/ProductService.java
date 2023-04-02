@@ -18,7 +18,7 @@ public interface ProductService {
 
     Product findOne(Long id);
 
-    List<Product> findAll(Pageable pageable, Specification<Product> specification);
+    List<Product> findAll(Pageable pageable, ProductCriteria criteria);
 
     List<Product> findBySeasonType(SeasonType seasonType, Pageable pageable);
 

@@ -3,9 +3,11 @@ package edu.bsuir.sneakersshop.service.impl;
 import edu.bsuir.sneakersshop.domain.entity.Product;
 import edu.bsuir.sneakersshop.domain.enums.SeasonType;
 import edu.bsuir.sneakersshop.domain.repository.ProductRepository;
+import edu.bsuir.sneakersshop.domain.spec.ProductSpecifications;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.ProductMessages;
+import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -51,7 +53,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll(Pageable pageable, Specification<Product> specification) {
+    public List<Product> findAll(Pageable pageable, ProductCriteria criteria) {
+        Specification<Product> specification = Specification.allOf(
+                ProductSpecifications.hasNameLike(criteria.getName()),
+                ProductSpecifications.hasDescriptionLike(criteria.getDescription()),
+                ProductSpecifications.hasBrandNameLike(criteria.getBrandName()),
+                ProductSpecifications.hasPriceBetween(criteria.getMinPrice(), criteria.getMaxPrice())
+        );
         return productRepository.findAll(specification, pageable).getContent();
     }
 

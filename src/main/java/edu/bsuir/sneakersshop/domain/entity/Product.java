@@ -1,6 +1,6 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
-import edu.bsuir.sneakersshop.domain.enums.SeasonType;
+import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
 import jakarta.persistence.*;
 import lombok.*;
 

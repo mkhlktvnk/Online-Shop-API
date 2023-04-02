@@ -1,10 +1,9 @@
 package edu.bsuir.sneakersshop.service;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
-import edu.bsuir.sneakersshop.domain.enums.SeasonType;
+import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
 import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.util.List;

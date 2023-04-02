@@ -1,7 +1,7 @@
 package edu.bsuir.sneakersshop.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.bsuir.sneakersshop.domain.enums.SeasonType;
+import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;

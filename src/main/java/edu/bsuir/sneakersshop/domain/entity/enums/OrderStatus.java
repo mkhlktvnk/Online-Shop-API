@@ -1,4 +1,4 @@
-package edu.bsuir.sneakersshop.domain.enums;
+package edu.bsuir.sneakersshop.domain.entity.enums;
 
 public enum OrderStatus {
     IN_PROCESSING,

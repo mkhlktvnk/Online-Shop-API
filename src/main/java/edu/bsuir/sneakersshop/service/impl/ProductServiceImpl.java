@@ -1,7 +1,7 @@
 package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
-import edu.bsuir.sneakersshop.domain.enums.SeasonType;
+import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
 import edu.bsuir.sneakersshop.domain.repository.ProductRepository;
 import edu.bsuir.sneakersshop.domain.spec.ProductSpecifications;
 import edu.bsuir.sneakersshop.service.ProductService;

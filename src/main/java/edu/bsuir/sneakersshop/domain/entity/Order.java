@@ -1,6 +1,6 @@
 package edu.bsuir.sneakersshop.domain.entity;
 
-import edu.bsuir.sneakersshop.domain.enums.OrderStatus;
+import edu.bsuir.sneakersshop.domain.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SizeModel {
-    @JsonProperty("id")
     @NotNull
     @Min(0)
+    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @JsonProperty("sizeValue")
     @NotNull
     @Min(1)
+    @JsonProperty("sizeValue")
     private Integer sizeValue;
 
-    @JsonProperty("quantity")
     @NotNull
     @Min(0)
+    @JsonProperty("quantity")
     private Integer quantity;
 }

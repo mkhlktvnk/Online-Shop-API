@@ -15,20 +15,21 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BrandModel {
-    @JsonProperty("id")
+
     @Min(1)
     @NotNull
+    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @JsonProperty("name")
     @NotNull
     @NotBlank
     @Length(max = 255)
+    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("description")
     @NotNull
     @NotBlank
     @Length(max = 5000)
+    @JsonProperty("description")
     private String description;
 }

@@ -16,26 +16,27 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewModel {
-    @JsonProperty("id")
+
     @NotNull
     @Min(0)
+    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @JsonProperty("topic")
     @NotNull
     @NotBlank
     @Length(max = 255)
+    @JsonProperty("topic")
     private String topic;
 
-    @JsonProperty("content")
     @NotNull
     @NotBlank
     @Length(max = 10000)
+    @JsonProperty("content")
     private String content;
 
-    @JsonProperty("mark")
     @NotNull
     @Min(1)
     @Max(5)
+    @JsonProperty("mark")
     private Integer mark;
 }

@@ -14,13 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImageModel {
-    @JsonProperty("id")
+
     @NotNull
     @Min(0)
+    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @JsonProperty("imageUrl")
     @NotNull
     @NotBlank
+    @JsonProperty(value = "imageUrl")
     private String imageUrl;
 }

@@ -22,7 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ProductMessages productMessages;
 
     @Override
-    public Review findOne(Long id) {
+    public Review findById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(reviewMessages.getNotFoundMessage()));
     }

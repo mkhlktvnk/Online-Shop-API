@@ -12,9 +12,7 @@ public interface BrandService {
 
     void delete(Long id);
 
-    Brand findOne(Long id);
-
-    Brand findOneByName(String name);
+    Brand findById(Long id);
 
     List<Brand> findAll(Pageable pageable);
 }

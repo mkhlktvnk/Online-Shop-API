@@ -26,7 +26,7 @@ public class BrandController {
 
     @GetMapping("/brands/{id}")
     public BrandModel getBrandById(@PathVariable Long id) {
-        return mapper.mapToModel(brandService.findOne(id));
+        return mapper.mapToModel(brandService.findById(id));
     }
 
     @PostMapping("/brands")

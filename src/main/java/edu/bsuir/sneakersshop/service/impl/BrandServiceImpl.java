@@ -45,14 +45,8 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand findOne(Long id) {
+    public Brand findById(Long id) {
         return brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(brandMessages.getNotFoundMessage()));
-    }
-
-    @Override
-    public Brand findOneByName(String name) {
-        return brandRepository.findByName(brandMessages.getNotFoundMessage())
                 .orElseThrow(() -> new EntityNotFoundException(brandMessages.getNotFoundMessage()));
     }
 

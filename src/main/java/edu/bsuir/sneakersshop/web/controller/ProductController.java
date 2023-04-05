@@ -27,7 +27,7 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public ProductModel getProductById(@PathVariable Long id) {
-        return mapper.mapToModel(productService.findOne(id));
+        return mapper.mapToModel(productService.findById(id));
     }
 
     @PostMapping("/products")

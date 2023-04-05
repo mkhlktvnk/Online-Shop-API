@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findOne(Long id) {
+    public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(productMessages.getNotFoundMessage()));
     }
@@ -61,21 +61,6 @@ public class ProductServiceImpl implements ProductService {
                 ProductSpecifications.hasPriceBetween(criteria.getMinPrice(), criteria.getMaxPrice())
         );
         return productRepository.findAll(specification, pageable).getContent();
-    }
-
-    @Override
-    public List<Product> findBySeasonType(SeasonType seasonType, Pageable pageable) {
-        return productRepository.findAllBySeasonType(seasonType, pageable);
-    }
-
-    @Override
-    public List<Product> findByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable) {
-        return productRepository.findAllByPriceBetween(min, max, pageable);
-    }
-
-    @Override
-    public List<Product> findByBrandId(Long brandId, Pageable pageable) {
-        return productRepository.findAllByBrandId(brandId, pageable);
     }
 
     @Override

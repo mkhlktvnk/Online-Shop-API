@@ -1,7 +1,6 @@
 package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
-import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
 import edu.bsuir.sneakersshop.domain.repository.ProductRepository;
 import edu.bsuir.sneakersshop.domain.spec.ProductSpecifications;
 import edu.bsuir.sneakersshop.service.ProductService;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service

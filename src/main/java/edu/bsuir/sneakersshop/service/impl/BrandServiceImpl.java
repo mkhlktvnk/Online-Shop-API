@@ -9,6 +9,7 @@ import edu.bsuir.sneakersshop.service.message.BrandMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class BrandServiceImpl implements BrandService {
     private final BrandMessages brandMessages;
 
     @Override
+    @Transactional
     public Brand insert(Brand brand) {
         if (brandRepository.existsByName(brand.getName())) {
             throw new EntityAlreadyExistsException(brandMessages.getAlreadyExistsMessage());
@@ -28,6 +30,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Transactional
     public void update(Long id, Brand brand) {
         Brand brandToUpdate = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(brandMessages.getNotFoundMessage()));
@@ -37,6 +40,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if (!brandRepository.existsById(id)) {
             throw new EntityNotFoundException(brandMessages.getNotFoundMessage());

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 @Getter
 @PropertySource("classpath:message.properties")
 public class ProductMessages {
-    @Value("classpath:product.not-found.message")
+
+    @Value("${product.not-found.message}")
     private String notFoundMessage;
+
 }
 
 

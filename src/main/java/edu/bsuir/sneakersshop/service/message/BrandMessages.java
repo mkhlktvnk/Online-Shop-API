@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 @Getter
 @PropertySource("classpath:message.properties")
 public class BrandMessages {
-    @Value("classpath:brand.not-found.message")
+
+    @Value("${brand.not-found.message}")
     private String notFoundMessage;
 
-    @Value("classpath:brand.already-exists.message")
+    @Value("${brand.already-exists.message}")
     private String alreadyExistsMessage;
+
 }

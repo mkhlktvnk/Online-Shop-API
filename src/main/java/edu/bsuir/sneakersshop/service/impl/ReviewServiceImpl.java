@@ -10,6 +10,7 @@ import edu.bsuir.sneakersshop.service.message.ReviewMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public void update(Long id, Review review) {
         Review reviewToUpdate = reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(reviewMessages.getNotFoundMessage()));
@@ -62,6 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new EntityNotFoundException(reviewMessages.getNotFoundMessage());

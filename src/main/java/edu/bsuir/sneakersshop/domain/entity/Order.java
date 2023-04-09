@@ -32,6 +32,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
@@ -58,4 +59,5 @@ public class Order {
     private void calculateTotalPrice() {
         orderItems.forEach(orderItem -> totalPrice = totalPrice.add(orderItem.getTotalPrice()));
     }
+
 }

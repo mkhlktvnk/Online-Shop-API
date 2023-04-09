@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends CrudRepository<Review, Long>, PagingAndSortingRepository<Review, Long> {
+
     List<Review> findAllByUserId(Long id, Pageable pageable);
     
     List<Review> findAllByProductId(Long id, Pageable pageable);
+
 }

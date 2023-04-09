@@ -56,4 +56,5 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private Set<Image> images = new HashSet<>();
+
 }

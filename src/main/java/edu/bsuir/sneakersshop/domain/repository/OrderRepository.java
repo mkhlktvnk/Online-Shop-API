@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findAllByUserId(Long userId, Pageable pageable);
+
 }

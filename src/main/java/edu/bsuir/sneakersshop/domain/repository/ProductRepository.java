@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long>,
         PagingAndSortingRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+
     List<Product> findAllBySeasonType(SeasonType seasonType, Pageable pageable);
     List<Product> findAllByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable);
     List<Product> findAllByBrandId(Long brandId, Pageable pageable);

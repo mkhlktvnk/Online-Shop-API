@@ -51,4 +51,5 @@ public class OrderItem {
     private void calculateTotalPrice() {
         totalPrice = BigDecimal.valueOf(productQuantity, 2).multiply(product.getPrice());
     }
+
 }

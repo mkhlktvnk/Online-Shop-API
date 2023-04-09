@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 @UtilityClass
 public class ProductSpecifications {
+
     public static Specification<Product> hasNameLike(String name) {
         return (root, query, builder) -> {
             if (name == null) {
@@ -46,4 +47,5 @@ public class ProductSpecifications {
             return builder.between(root.get("price"), min, max);
         };
     }
+
 }

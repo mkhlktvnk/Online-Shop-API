@@ -28,7 +28,7 @@ public class Order {
 
     @Column(nullable = false)
     @CreationTimestamp
-    private Timestamp createdAt;
+    private Timestamp placedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_item_id", nullable = false)

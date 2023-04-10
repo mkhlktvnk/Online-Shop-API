@@ -22,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order makeOrder(OrderRequest orderRequest) {
-        User user = userService.findById(orderRequest.getUserId());
+    public Order makeOrder(long userId, OrderRequest orderRequest) {
+        User user = userService.findById(userId);
         Product product = productService.findById(orderRequest.getProductId());
 
         OrderItem orderItem = new OrderItem();

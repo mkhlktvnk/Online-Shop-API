@@ -29,7 +29,6 @@ public class OrderController {
     @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderModel makeOrder(@AuthenticationPrincipal User user, @Valid @RequestBody OrderRequest orderRequest) {
-        log.info(user.toString());
         Order order = orderService.makeOrder(user.getId(), orderRequest);
         return orderMapper.mapToModel(order);
     }

@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserModel {
 
-    @NotNull
     @JsonProperty(value =  "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
@@ -36,6 +35,18 @@ public class UserModel {
     @Size(min = 8)
     @JsonProperty(value = "password")
     private String password;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 1)
+    @JsonProperty(value = "address")
+    private String address;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 1)
+    @JsonProperty(value = "phoneNumber")
+    private String phoneNumber;
 
     @NotNull
     @NotBlank

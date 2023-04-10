@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         }
 
         Role role = roleRepository.findByAuthority(RoleType.USER.getRoleName())
-                .orElse(new Role(RoleType.USER));
+                .orElse(roleRepository.save(new Role(RoleType.USER)));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthorities(Collections.singleton(role));

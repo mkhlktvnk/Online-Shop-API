@@ -22,7 +22,7 @@ public class BrandController {
 
     @GetMapping("/brands")
     public List<BrandModel> getBrands(@PageableDefault Pageable pageable) {
-        return (List<BrandModel>) mapper.mapToModel(brandService.findAll(pageable));
+        return mapper.mapToModel(brandService.findAll(pageable));
     }
 
     @GetMapping("/brands/{id}")

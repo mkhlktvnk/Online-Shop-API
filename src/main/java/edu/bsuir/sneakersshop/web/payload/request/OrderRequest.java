@@ -13,10 +13,6 @@ public class OrderRequest {
 
     @NotNull
     @Min(1)
-    private Long userId;
-
-    @NotNull
-    @Min(1)
     private Long productId;
 
     @NotNull

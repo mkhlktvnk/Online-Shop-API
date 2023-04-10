@@ -37,8 +37,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v0/brands/**")
                     .permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v0/orders/**")
-                    .fullyAuthenticated()
-                    .anyRequest()
+                    .hasRole(RoleType.ADMIN.getRoleName())
+                .requestMatchers(HttpMethod.GET, "/api/v0/users/**")
                     .hasAnyRole(RoleType.USER.getRoleName(), RoleType.ADMIN.getRoleName())
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

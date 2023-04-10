@@ -6,7 +6,10 @@ import org.mapstruct.Mapper;
 
 import java.util.Collection;
 
-@Mapper
+@Mapper(uses = {
+        ImageMapper.class,
+        SizeMapper.class
+})
 public interface ProductMapper {
     Product mapToEntity(ProductModel productModel);
 

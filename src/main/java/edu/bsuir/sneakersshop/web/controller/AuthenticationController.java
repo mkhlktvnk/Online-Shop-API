@@ -28,6 +28,7 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public TokenResponse authenticate(@Valid @RequestBody AuthenticationRequest request) {
         return authService.authenticate(request);
     }

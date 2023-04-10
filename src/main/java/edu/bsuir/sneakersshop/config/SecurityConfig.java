@@ -19,12 +19,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(requestRegistry -> requestRegistry
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/v0/products/**",
-                                "/api/v0/brands/**",
-                                "/api/v0/reviews/**"
-                        )
-                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
                 );
 
         return http.build();

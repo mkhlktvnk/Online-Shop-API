@@ -1,5 +1,7 @@
 package edu.bsuir.sneakersshop.config;
 
+import edu.bsuir.sneakersshop.domain.entity.enums.RoleType;
+import edu.bsuir.sneakersshop.web.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,16 +24,26 @@ public class SecurityConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        http.csrf().disable()
-                .httpBasic().disable()
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilter jwtFilter) {
+        httpSecurity
+                .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeHttpRequests(requestRegistry -> requestRegistry
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
-                );
+                .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST, "/api/v0/authenticate", "/api/v0/register")
+                    .permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v0/products/**")
+                    .permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v0/brands/**")
+                    .permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v0/orders/**")
+                    .fullyAuthenticated()
+                    .anyRequest()
+                    .hasAnyRole(RoleType.USER.getRoleName(), RoleType.ADMIN.getRoleName())
+                .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+        return httpSecurity.build();
     }
 
     @Bean

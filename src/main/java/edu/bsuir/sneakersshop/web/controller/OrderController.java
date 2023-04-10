@@ -4,7 +4,7 @@ import edu.bsuir.sneakersshop.domain.entity.Order;
 import edu.bsuir.sneakersshop.service.OrderService;
 import edu.bsuir.sneakersshop.web.mapper.OrderMapper;
 import edu.bsuir.sneakersshop.web.model.OrderModel;
-import edu.bsuir.sneakersshop.web.request.OrderRequest;
+import edu.bsuir.sneakersshop.web.payload.request.OrderRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;

@@ -8,7 +8,7 @@ import edu.bsuir.sneakersshop.domain.repository.OrderRepository;
 import edu.bsuir.sneakersshop.service.OrderService;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.UserService;
-import edu.bsuir.sneakersshop.web.request.OrderRequest;
+import edu.bsuir.sneakersshop.web.payload.request.OrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

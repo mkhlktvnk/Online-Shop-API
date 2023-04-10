@@ -1,4 +1,4 @@
-package edu.bsuir.sneakersshop.web.request;
+package edu.bsuir.sneakersshop.web.payload.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

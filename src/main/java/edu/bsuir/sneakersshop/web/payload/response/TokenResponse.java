@@ -1,4 +1,4 @@
-package edu.bsuir.sneakersshop.web.response;
+package edu.bsuir.sneakersshop.web.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

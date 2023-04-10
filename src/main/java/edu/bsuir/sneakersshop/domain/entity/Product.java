@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,9 +54,9 @@ public class Product implements Serializable {
     private Brand brand;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
-    private Set<Size> sizes = new HashSet<>();
+    private Collection<Size> sizes;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
-    private Set<Image> images = new HashSet<>();
+    private Collection<Image> images;
 
 }

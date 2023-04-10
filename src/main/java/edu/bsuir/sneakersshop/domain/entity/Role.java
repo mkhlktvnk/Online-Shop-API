@@ -16,7 +16,6 @@ import java.util.Collection;
 @EqualsAndHashCode
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
 
@@ -39,4 +38,5 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return authority;
     }
+
 }

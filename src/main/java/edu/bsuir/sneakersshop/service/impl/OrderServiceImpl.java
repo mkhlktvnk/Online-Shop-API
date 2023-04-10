@@ -9,8 +9,11 @@ import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.UserService;
 import edu.bsuir.sneakersshop.web.payload.request.OrderRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
+
+    @Override
+    public List<Order> findAllByUserId(long userId, Pageable pageable) {
+        return orderRepository.findAllByUserId(userId, pageable);
+    }
 
     @Override
     @Transactional

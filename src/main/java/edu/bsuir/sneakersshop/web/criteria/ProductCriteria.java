@@ -15,11 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductCriteria {
 
-    @NotBlank
     @Size(min = 1)
     private String name;
 
-    @NotBlank
     @Size(min = 1)
     private String description;
 
@@ -31,7 +29,6 @@ public class ProductCriteria {
     @Digits(integer = 40, fraction = 2)
     private BigDecimal maxPrice;
 
-    @NotBlank
     @Size(min = 1)
     private String brandName;
 }

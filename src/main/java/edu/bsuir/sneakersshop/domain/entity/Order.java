@@ -25,6 +25,12 @@ public class Order implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false)
+    private Integer size;
+
+    @Column(nullable = false)
     private BigDecimal totalPrice;
 
     @Column(nullable = false)
@@ -32,14 +38,14 @@ public class Order implements Serializable {
     private Timestamp placedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_item_id", nullable = false)
-    private OrderItem orderItem;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @PrePersist
     void calculateTotalPrice() {
-        totalPrice = orderItem.getTotalPrice();
+        totalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }

@@ -2,11 +2,14 @@ package edu.bsuir.sneakersshop.domain.entity;
 
 import edu.bsuir.sneakersshop.domain.entity.enums.RoleType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 @Entity
 @Table(name = "roles")
@@ -25,10 +28,15 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false, unique = true)
     private String authority;
 
-    @ManyToMany(mappedBy = "authorities")
-    private Set<User> users = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authorities")
+    private Collection<User> users;
 
     public Role(RoleType roleType) {
         this.authority = roleType.getRoleName();
+    }
+
+    @Override
+    public String getAuthority() {
+        return authority;
     }
 }

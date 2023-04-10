@@ -25,8 +25,8 @@ public class OrderModel {
     private BigDecimal totalPrice;
 
     @NotNull
-    @JsonProperty(value = "orderItem", access = JsonProperty.Access.READ_ONLY)
-    private OrderItemModel orderItemModel;
+    @JsonProperty(value = "product", access = JsonProperty.Access.READ_ONLY)
+    private ProductModel productModel;
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

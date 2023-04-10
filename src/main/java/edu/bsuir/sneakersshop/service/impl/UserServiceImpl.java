@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         }
 
         Role role = roleRepository.findByAuthority(RoleType.USER.getRoleName())
-                .orElse(roleRepository.save(new Role(RoleType.USER)));
+                .orElseGet(() -> roleRepository.save(new Role(RoleType.USER)));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthorities(Collections.singleton(role));

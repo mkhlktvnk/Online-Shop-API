@@ -25,8 +25,15 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);
 
+    @GetMapping("/orders")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderModel> findAll(@PageableDefault Pageable pageable) {
+        List<Order> orders = orderService.findAll(pageable);
+        return orderMapper.mapToModel(orders);
+    }
+
     @GetMapping("/users/{userId}/orders")
-    @PreAuthorize("#userId == authentication.principal.id")
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public List<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
         List<Order> orders = orderService.findAllByUserId(userId, pageable);
         return orderMapper.mapToModel(orders);
@@ -34,7 +41,7 @@ public class OrderController {
 
     @PostMapping("/users/{userId}/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("#userId == authentication.principal.id")
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public OrderModel makeOrder(@PathVariable Long userId, @Valid @RequestBody OrderRequest orderRequest) {
         Order order = orderService.makeOrder(userId, orderRequest);
         return orderMapper.mapToModel(order);

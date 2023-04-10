@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     public Order findById(long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("order.not-found.message"))
+                        messages.getMessage("order.not-found"))
                 );
     }
 
@@ -42,12 +42,12 @@ public class OrderServiceImpl implements OrderService {
     public Order findByUserAndOrderId(long userId, long orderId) {
         if (!userService.existsById(userId)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("order.not-found.message")
+                    messages.getMessage("order.not-found")
             );
         }
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("order.not-found.message"))
+                        messages.getMessage("order.not-found"))
                 );
     }
 

@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("product.not-found.message"
+                        messages.getMessage("product.not-found"
                 )));
         productToUpdate.setName(product.getName());
         productToUpdate.setDescription(product.getDescription());
@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("product.not-found.message")
+                    messages.getMessage("product.not-found")
             );
         }
         productRepository.deleteById(id);
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(messages.getMessage(
-                        "product.not-found.message"
+                        "product.not-found"
                 )));
     }
 

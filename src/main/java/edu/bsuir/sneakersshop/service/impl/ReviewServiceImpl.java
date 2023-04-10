@@ -24,7 +24,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Review findById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("review.not-found.message")
+                        messages.getMessage("review.not-found")
                 ));
     }
 
@@ -42,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> findByProductId(Long productId, Pageable pageable) {
         if (!productService.isExistsById(productId)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("review.not-found.message")
+                    messages.getMessage("review.not-found")
             );
         }
         return reviewRepository.findAllByProductId(productId, pageable);
@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void update(Long id, Review review) {
         Review reviewToUpdate = reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("review.not-found.message")
+                        messages.getMessage("review.not-found")
                 ));
         reviewToUpdate.setId(id);
         reviewToUpdate.setTopic(review.getTopic());
@@ -72,7 +72,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("review.not-found.message")
+                    messages.getMessage("review.not-found")
             );
         }
         reviewRepository.deleteById(id);

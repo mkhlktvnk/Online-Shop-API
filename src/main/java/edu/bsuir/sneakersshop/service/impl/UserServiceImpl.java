@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public User findById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("user.not-found.message")
+                        messages.getMessage("user.not-found")
                 ));
     }
 
@@ -41,17 +41,17 @@ public class UserServiceImpl implements UserService {
     public User insert(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found.message")
+                    messages.getMessage("user.not-found")
             );
         }
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found.message")
+                    messages.getMessage("user.not-found")
             );
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found.message")
+                    messages.getMessage("user.not-found")
             );
         }
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("user.not-found.message")
+                        messages.getMessage("user.not-found")
                 ));
     }
 }

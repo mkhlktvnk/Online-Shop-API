@@ -5,6 +5,7 @@ import edu.bsuir.sneakersshop.web.model.BrandModel;
 import org.mapstruct.Mapper;
 
 import java.util.Collection;
+import java.util.List;
 
 @Mapper
 public interface BrandMapper {
@@ -12,7 +13,7 @@ public interface BrandMapper {
 
     BrandModel mapToModel(Brand brand);
 
-    Collection<Brand> mapToEntity(Collection<BrandModel> brandModels);
+    List<Brand> mapToEntity(Collection<BrandModel> brandModels);
 
-    Collection<BrandModel> mapToModel(Collection<Brand> brands);
+    List<BrandModel> mapToModel(Collection<Brand> brands);
 }

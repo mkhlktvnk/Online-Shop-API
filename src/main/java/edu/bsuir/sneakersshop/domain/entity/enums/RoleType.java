@@ -1,8 +1,8 @@
 package edu.bsuir.sneakersshop.domain.entity.enums;
 
 public enum RoleType {
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+    USER("USER"),
+    ADMIN("ADMIN");
 
     private final String roleName;
 

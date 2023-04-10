@@ -2,10 +2,7 @@ package edu.bsuir.sneakersshop.domain.entity;
 
 import edu.bsuir.sneakersshop.domain.entity.enums.RoleType;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
@@ -16,6 +13,7 @@ import java.util.Set;
 @EqualsAndHashCode
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
 

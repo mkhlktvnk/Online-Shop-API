@@ -14,13 +14,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "sizes")
 @EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor
-public class Size {
+public class Size implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

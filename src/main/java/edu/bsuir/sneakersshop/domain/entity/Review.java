@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
@@ -24,7 +25,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class Review implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

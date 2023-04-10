@@ -1,7 +1,6 @@
 package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.service.JwtService;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

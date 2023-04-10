@@ -30,12 +30,20 @@ public class ReviewController {
         return (List<ReviewModel>) mapper.mapToModel(reviewService.findByProductId(productId, pageable));
     }
 
+    @GetMapping("/users/{userId}/reviews")
+    @PreAuthorize("#userId == authentication.principal.id")
+    public List<ReviewModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
+        List<Review> reviews = reviewService.findAllByUserId(userId, pageable);
+        return (List<ReviewModel>) mapper.mapToModel(reviews);
+    }
+
     @GetMapping("/products/{productId}/reviews/{reviewId}")
     public ReviewModel findByUserAndReviewId(@PathVariable Long productId, @PathVariable Long reviewId) {
         return mapper.mapToModel(reviewService.findByProductAndReviewId(productId, reviewId));
     }
 
     @PostMapping("/products/{productId}/reviews")
+    @ResponseStatus(HttpStatus.CREATED)
     public ReviewModel makeReview(
             @AuthenticationPrincipal User user, @PathVariable Long productId,
             @Valid @RequestBody ReviewModel reviewModel) {

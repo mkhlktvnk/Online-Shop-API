@@ -5,7 +5,7 @@ import edu.bsuir.sneakersshop.domain.repository.ProductRepository;
 import edu.bsuir.sneakersshop.domain.spec.ProductSpecifications;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
-import edu.bsuir.sneakersshop.service.message.ProductMessages;
+import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductMessages productMessages;
+    private final MessagesSource messages;
 
     @Override
     public Product insert(Product product) {
@@ -28,7 +28,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(productMessages.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("product.not-found.message"
+                )));
         productToUpdate.setName(product.getName());
         productToUpdate.setDescription(product.getDescription());
         productToUpdate.setPrice(product.getPrice());
@@ -39,7 +41,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException(productMessages.getNotFoundMessage());
+            throw new EntityNotFoundException(
+                    messages.getMessage("product.not-found.message")
+            );
         }
         productRepository.deleteById(id);
     }
@@ -47,7 +51,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(productMessages.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(messages.getMessage(
+                        "product.not-found.message"
+                )));
     }
 
     @Override

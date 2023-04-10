@@ -7,6 +7,8 @@ import edu.bsuir.sneakersshop.domain.repository.OrderRepository;
 import edu.bsuir.sneakersshop.service.OrderService;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.UserService;
+import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import edu.bsuir.sneakersshop.web.payload.request.OrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,32 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
+    private final MessagesSource messages;
 
     @Override
     public List<Order> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public Order findById(long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("order.not-found.message"))
+                );
+    }
+
+    @Override
+    public Order findByUserAndOrderId(long userId, long orderId) {
+        if (!userService.existsById(userId)) {
+            throw new EntityNotFoundException(
+                    messages.getMessage("order.not-found.message")
+            );
+        }
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("order.not-found.message"))
+                );
     }
 
     @Override

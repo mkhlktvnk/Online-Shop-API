@@ -8,7 +8,7 @@ import edu.bsuir.sneakersshop.domain.repository.UserRepository;
 import edu.bsuir.sneakersshop.service.UserService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
-import edu.bsuir.sneakersshop.service.message.UserMessages;
+import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,25 +26,33 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserMessages userMessages;
+    private final MessagesSource messages;
 
     @Override
     public User findById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(userMessages.getNotFound()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("user.not-found.message")
+                ));
     }
 
     @Override
     @Transactional
     public User insert(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException(userMessages.getAlreadyExists());
+            throw new EntityAlreadyExistsException(
+                    messages.getMessage("user.not-found.message")
+            );
         }
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new EntityAlreadyExistsException(userMessages.getAlreadyExists());
+            throw new EntityAlreadyExistsException(
+                    messages.getMessage("user.not-found.message")
+            );
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new EntityAlreadyExistsException(userMessages.getAlreadyExists());
+            throw new EntityAlreadyExistsException(
+                    messages.getMessage("user.not-found.message")
+            );
         }
 
         Role role = roleRepository.findByAuthority(RoleType.USER.getRoleName())
@@ -57,9 +65,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean existsById(long id) {
+        return userRepository.existsById(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(userMessages.getNotFound()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("user.not-found.message")
+                ));
     }
 }

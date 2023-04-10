@@ -5,7 +5,7 @@ import edu.bsuir.sneakersshop.domain.repository.BrandRepository;
 import edu.bsuir.sneakersshop.service.BrandService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
-import edu.bsuir.sneakersshop.service.message.BrandMessages;
+import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
-    private final BrandMessages brandMessages;
+    private final MessagesSource messages;
 
     @Override
     @Transactional
     public Brand insert(Brand brand) {
         if (brandRepository.existsByName(brand.getName())) {
-            throw new EntityAlreadyExistsException(brandMessages.getAlreadyExistsMessage());
+            throw new EntityAlreadyExistsException(messages.getMessage("brand.not-found.message"));
         }
         return brandRepository.save(brand);
     }
@@ -33,7 +33,9 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public void update(Long id, Brand brand) {
         Brand brandToUpdate = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(brandMessages.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("brand.not-found.message")
+                ));
         brandToUpdate.setName(brand.getName());
         brandToUpdate.setDescription(brand.getDescription());
         brandRepository.save(brandToUpdate);
@@ -43,7 +45,9 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public void delete(Long id) {
         if (!brandRepository.existsById(id)) {
-            throw new EntityNotFoundException(brandMessages.getNotFoundMessage());
+            throw new EntityNotFoundException(
+                    messages.getMessage("brand.not-found.message")
+            );
         }
         brandRepository.deleteById(id);
     }
@@ -51,7 +55,9 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Brand findById(Long id) {
         return brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(brandMessages.getNotFoundMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage("brand.not-found.message"))
+                );
     }
 
     @Override

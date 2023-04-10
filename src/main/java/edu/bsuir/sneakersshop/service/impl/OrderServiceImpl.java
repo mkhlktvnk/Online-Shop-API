@@ -23,6 +23,11 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
 
     @Override
+    public List<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable).getContent();
+    }
+
+    @Override
     public List<Order> findAllByUserId(long userId, Pageable pageable) {
         return orderRepository.findAllByUserId(userId, pageable);
     }

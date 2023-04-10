@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> findByUserId(Long userId, Pageable pageable) {
+    public List<Review> findAllByUserId(Long userId, Pageable pageable) {
         return reviewRepository.findAllByUserId(userId, pageable);
     }
 

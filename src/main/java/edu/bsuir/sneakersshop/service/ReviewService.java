@@ -7,11 +7,12 @@ import java.util.List;
 
 public interface ReviewService {
     Review findById(Long id);
+
     Review findByProductAndReviewId(long productId, long reviewId);
 
     List<Review> findAll(Pageable pageable);
 
-    List<Review> findByUserId(Long userId, Pageable pageable);
+    List<Review> findAllByUserId(Long userId, Pageable pageable);
 
     List<Review> findByProductId(Long productId, Pageable pageable);
 

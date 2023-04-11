@@ -5,7 +5,7 @@
 1. Тип приложения - веб-приложение
 2. Стратегия развертывания: развертывание Docker-контейнеров на облачном сервисе.
 3. Технологии:
-- **Backend**: `Java 8, Spring Boot, Spring Data JPA, Spring Security, JWT, PostgreSQL, Redis, Docker, Liquidbase, Grafana (расширяемость)
+- **Backend**: Java 17, Spring Boot, Spring Data JPA, Spring Security, JWT, PostgreSQL, Redis, Docker, Liquidbase, Grafana
 
 4. Показатели качества:
 - **Качества дизайна**: возможность повторного использования

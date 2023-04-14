@@ -8,6 +8,7 @@ import edu.bsuir.sneakersshop.domain.repository.UserRepository;
 import edu.bsuir.sneakersshop.service.UserService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessageKey;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public User findById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("user.not-found")
+                        messages.getMessage(MessageKey.USER_NOT_FOUND_BY_ID, id)
                 ));
     }
 
@@ -41,17 +42,20 @@ public class UserServiceImpl implements UserService {
     public User insert(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found")
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_EMAIL,
+                            user.getEmail())
             );
         }
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found")
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_USERNAME,
+                            user.getUsername())
             );
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
             throw new EntityAlreadyExistsException(
-                    messages.getMessage("user.not-found")
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_PHONE_NUMBER,
+                            user.getUsername())
             );
         }
 

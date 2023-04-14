@@ -8,6 +8,7 @@ import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.ReviewService;
 import edu.bsuir.sneakersshop.service.UserService;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessageKey;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,18 +29,22 @@ public class ReviewServiceImpl implements ReviewService {
     public Review findById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("review.not-found")
+                        messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
                 ));
     }
 
     @Override
     @Transactional
     public Review findByProductAndReviewId(long productId, long reviewId) {
-        if (!productService.isExistsById(productId)) {
-            throw new EntityNotFoundException(messages.getMessage("product.not-found"));
+        if (!productService.existsById(productId)) {
+            throw new EntityNotFoundException(
+                    messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
+            );
         }
         return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException(messages.getMessage("review.not-found")));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, reviewId)
+                ));
     }
 
     @Override
@@ -54,9 +59,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> findByProductId(Long productId, Pageable pageable) {
-        if (!productService.isExistsById(productId)) {
+        if (!productService.existsById(productId)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("review.not-found")
+                    messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
         return reviewRepository.findAllByProductId(productId, pageable);
@@ -84,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void update(Long id, Review review) {
         Review reviewToUpdate = reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("review.not-found")
+                        messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
                 ));
         reviewToUpdate.setId(id);
         reviewToUpdate.setTopic(review.getTopic());
@@ -98,7 +103,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("review.not-found")
+                    messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
             );
         }
         reviewRepository.deleteById(id);
@@ -108,10 +113,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void deleteByUserAndReviewId(long userId, long reviewId) {
         if (!userService.existsById(userId)) {
-            throw new EntityNotFoundException(messages.getMessage("user.not-found"));
+            throw new EntityNotFoundException(
+                    messages.getMessage(MessageKey.USER_NOT_FOUND_BY_ID, userId)
+            );
         }
         if (!reviewRepository.existsById(reviewId)) {
-            throw new EntityNotFoundException(messages.getMessage("review.not-found"));
+            throw new EntityNotFoundException(
+                    messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, reviewId)
+            );
         }
         reviewRepository.deleteById(reviewId);
     }

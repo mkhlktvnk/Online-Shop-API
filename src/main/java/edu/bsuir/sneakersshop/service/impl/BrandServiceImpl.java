@@ -5,6 +5,7 @@ import edu.bsuir.sneakersshop.domain.repository.BrandRepository;
 import edu.bsuir.sneakersshop.service.BrandService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessageKey;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,12 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public Brand insert(Brand brand) {
         if (brandRepository.existsByName(brand.getName())) {
-            throw new EntityAlreadyExistsException(messages.getMessage("brand.not-found"));
+            throw new EntityAlreadyExistsException(
+                    messages.getMessage(
+                            MessageKey.BRAND_ALREADY_EXISTS_WITH_NAME,
+                            brand.getName()
+                    )
+            );
         }
         return brandRepository.save(brand);
     }
@@ -34,7 +40,7 @@ public class BrandServiceImpl implements BrandService {
     public void update(Long id, Brand brand) {
         Brand brandToUpdate = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("brand.not-found")
+                        messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id)
                 ));
         brandToUpdate.setName(brand.getName());
         brandToUpdate.setDescription(brand.getDescription());
@@ -46,7 +52,7 @@ public class BrandServiceImpl implements BrandService {
     public void delete(Long id) {
         if (!brandRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("brand.not-found")
+                    messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id)
             );
         }
         brandRepository.deleteById(id);
@@ -56,7 +62,7 @@ public class BrandServiceImpl implements BrandService {
     public Brand findById(Long id) {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("brand.not-found"))
+                        messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id))
                 );
     }
 

@@ -2,11 +2,11 @@ package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.domain.entity.Category;
 import edu.bsuir.sneakersshop.domain.repository.CategoryRepository;
-import edu.bsuir.sneakersshop.domain.spec.CategorySpecifications;
 import edu.bsuir.sneakersshop.service.CategoryService;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessageKey;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import edu.bsuir.sneakersshop.web.criteria.CategoryCriteria;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Page<Category> findAllByProductId(long productId, Pageable pageable) {
-        if (!productService.isExistsById(productId)) {
+        if (!productService.existsById(productId)) {
             throw new EntityNotFoundException(
-                    messagesSource.getMessage("product.not-found")
+                    messagesSource.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
         return categoryRepository.findAllByProductsId(productId, pageable);
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findById(long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messagesSource.getMessage("category.not-found")
+                        messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
                 ));
     }
 
@@ -58,7 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
     public Category insert(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
             throw new EntityAlreadyExistsException(
-                    messagesSource.getMessage("category.already-exists.by-name")
+                    messagesSource.getMessage(
+                            MessageKey.CATEGORY_ALREADY_EXISTS_BY_NAME,
+                            category.getName()
+                    )
             );
         }
         return categoryRepository.save(category);
@@ -69,12 +72,15 @@ public class CategoryServiceImpl implements CategoryService {
     public void updateById(long id, Category updateCategory) {
         if (categoryRepository.existsByName(updateCategory.getName())) {
             throw new EntityAlreadyExistsException(
-                    messagesSource.getMessage("category.already-exists.by-name")
+                    messagesSource.getMessage(
+                            MessageKey.CATEGORY_ALREADY_EXISTS_BY_NAME,
+                            updateCategory.getName()
+                    )
             );
         }
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messagesSource.getMessage("category.not-found")
+                        messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
                 ));
         category.setName(updateCategory.getName());
         category.setDescription(updateCategory.getDescription());
@@ -86,7 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(long id) {
         if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    messagesSource.getMessage("category.not-found")
+                    messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
             );
         }
         categoryRepository.deleteById(id);

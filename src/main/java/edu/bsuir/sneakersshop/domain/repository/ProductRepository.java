@@ -2,6 +2,7 @@ package edu.bsuir.sneakersshop.domain.repository;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
 import edu.bsuir.sneakersshop.domain.entity.enums.SeasonType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -15,8 +16,6 @@ import java.util.List;
 public interface ProductRepository extends CrudRepository<Product, Long>,
         PagingAndSortingRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
-    List<Product> findAllBySeasonType(SeasonType seasonType, Pageable pageable);
-    List<Product> findAllByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable);
-    List<Product> findAllByBrandId(Long brandId, Pageable pageable);
+    Page<Product> findAllByCategoriesId(Long categoriesId, Pageable pageable);
 
 }

@@ -12,4 +12,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
 
     Page<Category> findAllByProductsId(Long productId, Pageable pageable);
 
+    boolean existsByName(String name);
+
 }

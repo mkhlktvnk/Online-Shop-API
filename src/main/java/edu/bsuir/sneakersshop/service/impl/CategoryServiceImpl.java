@@ -2,16 +2,22 @@ package edu.bsuir.sneakersshop.service.impl;
 
 import edu.bsuir.sneakersshop.domain.entity.Category;
 import edu.bsuir.sneakersshop.domain.repository.CategoryRepository;
+import edu.bsuir.sneakersshop.domain.spec.CategorySpecifications;
 import edu.bsuir.sneakersshop.service.CategoryService;
 import edu.bsuir.sneakersshop.service.ProductService;
 import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
+import edu.bsuir.sneakersshop.web.criteria.CategoryCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static edu.bsuir.sneakersshop.domain.spec.CategorySpecifications.hasDescriptionLike;
+import static edu.bsuir.sneakersshop.domain.spec.CategorySpecifications.hasNameLike;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
     private final MessagesSource messagesSource;
 
     @Override
-    public Page<Category> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable);
+    public Page<Category> findAll(Pageable pageable, CategoryCriteria criteria) {
+        Specification<Category> specification = Specification.where(hasNameLike(criteria.getName()))
+                .and(hasDescriptionLike(criteria.getDescription()));
+
+        return categoryRepository.findAll(specification, pageable);
     }
 
     @Override

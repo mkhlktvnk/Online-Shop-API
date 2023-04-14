@@ -1,0 +1,78 @@
+package edu.bsuir.sneakersshop.service.impl;
+
+import edu.bsuir.sneakersshop.domain.entity.Category;
+import edu.bsuir.sneakersshop.domain.repository.CategoryRepository;
+import edu.bsuir.sneakersshop.service.CategoryService;
+import edu.bsuir.sneakersshop.service.ProductService;
+import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
+import edu.bsuir.sneakersshop.service.message.MessagesSource;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class CategoryServiceImpl implements CategoryService {
+    private final CategoryRepository categoryRepository;
+    private final ProductService productService;
+    private final MessagesSource messagesSource;
+
+    @Override
+    public Page<Category> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional
+    public Page<Category> findAllByProductId(long productId, Pageable pageable) {
+        if (!productService.isExistsById(productId)) {
+            throw new EntityNotFoundException(
+                    messagesSource.getMessage("product.not-found")
+            );
+        }
+        return categoryRepository.findAllByProductsId(productId, pageable);
+    }
+
+    @Override
+    public Category findById(long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messagesSource.getMessage("category.not-found")
+                ));
+    }
+
+    @Override
+    public Category insert(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    @Transactional
+    public void updateById(long id, Category updateCategory) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messagesSource.getMessage("category.not-found")
+                ));
+        category.setName(updateCategory.getName());
+        category.setDescription(updateCategory.getDescription());
+        categoryRepository.save(category);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException(
+                    messagesSource.getMessage("category.not-found")
+            );
+        }
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return categoryRepository.existsById(id);
+    }
+}

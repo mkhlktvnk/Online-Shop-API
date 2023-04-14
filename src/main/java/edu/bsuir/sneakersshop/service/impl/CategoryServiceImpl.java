@@ -4,6 +4,7 @@ import edu.bsuir.sneakersshop.domain.entity.Category;
 import edu.bsuir.sneakersshop.domain.repository.CategoryRepository;
 import edu.bsuir.sneakersshop.service.CategoryService;
 import edu.bsuir.sneakersshop.service.ProductService;
+import edu.bsuir.sneakersshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.sneakersshop.service.exception.EntityNotFoundException;
 import edu.bsuir.sneakersshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +45,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category insert(Category category) {
+        if (categoryRepository.existsByName(category.getName())) {
+            throw new EntityAlreadyExistsException(
+                    messagesSource.getMessage("category.already-exists.by-name")
+            );
+        }
         return categoryRepository.save(category);
     }
 
     @Override
     @Transactional
     public void updateById(long id, Category updateCategory) {
+        if (categoryRepository.existsByName(updateCategory.getName())) {
+            throw new EntityAlreadyExistsException(
+                    messagesSource.getMessage("category.already-exists.by-name")
+            );
+        }
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         messagesSource.getMessage("category.not-found")

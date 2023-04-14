@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class CategoryModel {
+public class CategoryModel extends RepresentationModel<CategoryModel> {
 
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;

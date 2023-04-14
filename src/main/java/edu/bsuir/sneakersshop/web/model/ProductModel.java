@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -20,7 +21,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductModel {
+public class ProductModel extends RepresentationModel<ProductModel> {
 
     @NotNull
     @Min(0)

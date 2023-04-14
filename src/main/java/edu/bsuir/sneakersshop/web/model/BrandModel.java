@@ -9,12 +9,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BrandModel {
+public class BrandModel extends RepresentationModel<BrandModel> {
 
     @Min(1)
     @NotNull

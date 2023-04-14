@@ -8,12 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageModel {
+public class ImageModel extends RepresentationModel<CategoryModel> {
 
     @NotNull
     @Min(0)

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderModel {
+public class OrderModel extends RepresentationModel<OrderModel> {
 
     @NotNull
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)

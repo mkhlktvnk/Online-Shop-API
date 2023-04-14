@@ -10,12 +10,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewModel {
+public class ReviewModel extends RepresentationModel<ProductModel> {
 
     @NotNull
     @Min(0)

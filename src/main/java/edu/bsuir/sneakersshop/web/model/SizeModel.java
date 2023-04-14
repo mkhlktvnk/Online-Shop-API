@@ -7,12 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SizeModel {
+public class SizeModel extends RepresentationModel<SizeModel> {
     @NotNull
     @Min(0)
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)

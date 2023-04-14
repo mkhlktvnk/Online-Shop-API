@@ -11,6 +11,7 @@ import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,17 +49,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> findAll(Pageable pageable) {
-        return reviewRepository.findAll(pageable).getContent();
+    public Page<Review> findAll(Pageable pageable) {
+        return reviewRepository.findAll(pageable);
     }
 
     @Override
-    public List<Review> findAllByUserId(Long userId, Pageable pageable) {
+    public Page<Review> findAllByUserId(Long userId, Pageable pageable) {
         return reviewRepository.findAllByUserId(userId, pageable);
     }
 
     @Override
-    public List<Review> findByProductId(Long productId, Pageable pageable) {
+    public Page<Review> findByProductId(Long productId, Pageable pageable) {
         if (!productService.existsById(productId)) {
             throw new EntityNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)

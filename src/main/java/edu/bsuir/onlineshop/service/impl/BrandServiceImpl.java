@@ -8,6 +8,7 @@ import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +68,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<Brand> findAll(Pageable pageable) {
-        return brandRepository.findAll(pageable).getContent();
+    public Page<Brand> findAll(Pageable pageable) {
+        return brandRepository.findAll(pageable);
     }
 }

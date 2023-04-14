@@ -8,9 +8,11 @@ import edu.bsuir.onlineshop.service.OrderService;
 import edu.bsuir.onlineshop.service.ProductService;
 import edu.bsuir.onlineshop.service.UserService;
 import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.payload.request.OrderRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,33 +28,34 @@ public class OrderServiceImpl implements OrderService {
     private final MessagesSource messages;
 
     @Override
-    public List<Order> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable).getContent();
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     @Override
     public Order findById(long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("order.not-found"))
-                );
+                        messages.getMessage(MessageKey.ORDER_NOT_FOUND_BY_ID, id)
+                ));
     }
 
     @Override
+    @Transactional
     public Order findByUserAndOrderId(long userId, long orderId) {
         if (!userService.existsById(userId)) {
             throw new EntityNotFoundException(
-                    messages.getMessage("order.not-found")
+                    messages.getMessage(MessageKey.ORDER_NOT_FOUND_BY_ID, userId)
             );
         }
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        messages.getMessage("order.not-found"))
-                );
+                        messages.getMessage(MessageKey.ORDER_NOT_FOUND_BY_ID, orderId)
+                ));
     }
 
     @Override
-    public List<Order> findAllByUserId(long userId, Pageable pageable) {
+    public Page<Order> findAllByUserId(long userId, Pageable pageable) {
         return orderRepository.findAllByUserId(userId, pageable);
     }
 

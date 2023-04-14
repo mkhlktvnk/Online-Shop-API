@@ -8,8 +8,11 @@ import edu.bsuir.onlineshop.web.payload.request.OrderRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,19 +23,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v0")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final PagedResourcesAssembler<Order> pagedResourcesAssembler;
     private final OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);
 
     @GetMapping("/orders")
-    public List<OrderModel> findAll(@PageableDefault Pageable pageable) {
-        List<Order> orders = orderService.findAll(pageable);
-        return orderMapper.mapToModel(orders);
+    public PagedModel<OrderModel> findAll(@PageableDefault Pageable pageable) {
+        Page<Order> orders = orderService.findAll(pageable);
+        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
     }
 
     @GetMapping("/orders/{id}")
@@ -43,9 +45,9 @@ public class OrderController {
 
     @GetMapping("/users/{userId}/orders")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public List<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
-        List<Order> orders = orderService.findAllByUserId(userId, pageable);
-        return orderMapper.mapToModel(orders);
+    public PagedModel<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
+        Page<Order> orders = orderService.findAllByUserId(userId, pageable);
+        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
     }
 
     @GetMapping("/users/{userId}/orders/{orderId}")

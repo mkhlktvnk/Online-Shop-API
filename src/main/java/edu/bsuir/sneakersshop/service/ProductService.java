@@ -2,9 +2,8 @@ package edu.bsuir.sneakersshop.service;
 
 import edu.bsuir.sneakersshop.domain.entity.Product;
 import edu.bsuir.sneakersshop.web.criteria.ProductCriteria;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface ProductService {
     Product insert(Product product);
@@ -15,7 +14,9 @@ public interface ProductService {
 
     Product findById(Long id);
 
-    List<Product> findAll(Pageable pageable, ProductCriteria criteria);
+    Page<Product> findAll(Pageable pageable, ProductCriteria criteria);
 
-    boolean isExistsById(Long id);
+    Page<Product> findAllByCategoryId(long categoryId, Pageable pageable);
+
+    boolean existsById(Long id);
 }

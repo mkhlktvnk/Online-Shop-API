@@ -46,11 +46,13 @@ public class Product implements Serializable {
     @JoinTable(
             joinColumns = @JoinColumn(
                     name = "product_id",
-                    referencedColumnName = "id"
+                    referencedColumnName = "id",
+                    nullable = false
             ),
             inverseJoinColumns = @JoinColumn(
                     name = "category_id",
-                    referencedColumnName = "id"
+                    referencedColumnName = "id",
+                    nullable = false
             )
     )
     private Collection<Category> categories;

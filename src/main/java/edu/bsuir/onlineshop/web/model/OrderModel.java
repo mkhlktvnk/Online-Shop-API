@@ -1,5 +1,6 @@
 package edu.bsuir.onlineshop.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,9 +25,11 @@ public class OrderModel extends RepresentationModel<OrderModel> {
     @JsonProperty(value = "totalPrice", access = JsonProperty.Access.READ_ONLY)
     private BigDecimal totalPrice;
 
-    @NotNull
-    @JsonProperty(value = "product", access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     private ProductModel productModel;
+
+    @JsonIgnore
+    private UserModel userModel;
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

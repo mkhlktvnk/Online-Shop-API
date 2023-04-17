@@ -1,13 +1,17 @@
 package edu.bsuir.onlineshop.web.controller;
 
+import edu.bsuir.onlineshop.domain.entity.Brand;
 import edu.bsuir.onlineshop.service.BrandService;
 import edu.bsuir.onlineshop.web.mapper.BrandMapper;
 import edu.bsuir.onlineshop.web.model.BrandModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +30,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BrandController {
     private final BrandService brandService;
+    private final PagedResourcesAssembler<Brand> pagedResourcesAssembler;
     private final BrandMapper mapper = Mappers.getMapper(BrandMapper.class);
 
     @GetMapping("/brands")
-    public List<BrandModel> getBrands(@PageableDefault Pageable pageable) {
-        return mapper.mapToModel(brandService.findAll(pageable));
+    public PagedModel<BrandModel> getBrands(@PageableDefault Pageable pageable) {
+        Page<Brand> brands = brandService.findAll(pageable);
+        return pagedResourcesAssembler.toModel(brands, mapper::mapToModel);
     }
 
     @GetMapping("/brands/{id}")

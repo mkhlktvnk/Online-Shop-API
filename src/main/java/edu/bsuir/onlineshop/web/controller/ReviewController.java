@@ -8,8 +8,11 @@ import edu.bsuir.onlineshop.web.model.ReviewModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,26 +25,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v0")
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
+    private final PagedResourcesAssembler<Review> pagedResourcesAssembler;
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
     @GetMapping("/products/{productId}/reviews")
-    public List<ReviewModel> getReviewsByProductId(
+    public PagedModel<ReviewModel> getReviewsByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
-        return (List<ReviewModel>) mapper.mapToModel(reviewService.findByProductId(productId, pageable));
+        Page<Review> reviews = reviewService.findByProductId(productId, pageable);
+        return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
     }
 
     @GetMapping("/users/{userId}/reviews")
     @PreAuthorize("#userId == authentication.principal.id")
-    public List<ReviewModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
-        List<Review> reviews = reviewService.findAllByUserId(userId, pageable);
-        return (List<ReviewModel>) mapper.mapToModel(reviews);
+    public PagedModel<ReviewModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
+        Page<Review> reviews = reviewService.findAllByUserId(userId, pageable);
+        return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
     }
 
     @GetMapping("/products/{productId}/reviews/{reviewId}")

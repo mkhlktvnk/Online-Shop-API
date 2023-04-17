@@ -1,6 +1,7 @@
 package edu.bsuir.onlineshop.service.impl;
 
 import edu.bsuir.onlineshop.domain.entity.Product;
+import edu.bsuir.onlineshop.domain.repository.CategoryRepository;
 import edu.bsuir.onlineshop.domain.repository.ProductRepository;
 import edu.bsuir.onlineshop.domain.spec.ProductSpecifications;
 import edu.bsuir.onlineshop.service.CategoryService;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
     private final MessagesSource messages;
 
     @Override
@@ -71,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> findAllByCategoryId(long categoryId, Pageable pageable) {
-        if (!categoryService.existsById(categoryId)) {
+        if (!categoryRepository.existsById(categoryId)) {
             throw new EntityNotFoundException(
                     messages.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID)
             );

@@ -5,10 +5,7 @@ import edu.bsuir.onlineshop.web.controller.OrderController;
 import edu.bsuir.onlineshop.web.controller.ProductController;
 import edu.bsuir.onlineshop.web.controller.UserController;
 import edu.bsuir.onlineshop.web.model.OrderModel;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.springframework.http.HttpMethod;
 
 import java.util.Collection;
@@ -22,8 +19,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
         UserMapper.class
 })
 public interface OrderMapper {
-
-    @Mapping(target = "productModel", source = "product")
+    @Mappings({
+            @Mapping(target = "productModel", source = "product"),
+            @Mapping(target = "userModel", source = "user")
+    })
     OrderModel mapToModel(Order order);
 
     List<OrderModel> mapToModel(Collection<Order> orders);

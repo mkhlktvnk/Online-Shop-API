@@ -2,8 +2,8 @@ package edu.bsuir.onlineshop.service.impl;
 
 import edu.bsuir.onlineshop.domain.entity.Category;
 import edu.bsuir.onlineshop.domain.repository.CategoryRepository;
+import edu.bsuir.onlineshop.domain.repository.ProductRepository;
 import edu.bsuir.onlineshop.service.CategoryService;
-import edu.bsuir.onlineshop.service.ProductService;
 import edu.bsuir.onlineshop.service.exception.EntityAlreadyExistsException;
 import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
@@ -23,7 +23,7 @@ import static edu.bsuir.onlineshop.domain.spec.CategorySpecifications.hasNameLik
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
     private final MessagesSource messagesSource;
 
     @Override
@@ -37,11 +37,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Page<Category> findAllByProductId(long productId, Pageable pageable) {
-        if (!productService.existsById(productId)) {
+        if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException(
                     messagesSource.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
+
         return categoryRepository.findAllByProductsId(productId, pageable);
     }
 
@@ -64,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
                     )
             );
         }
+
         return categoryRepository.save(category);
     }
 

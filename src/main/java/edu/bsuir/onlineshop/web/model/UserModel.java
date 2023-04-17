@@ -36,7 +36,7 @@ public class UserModel extends RepresentationModel<UserModel> {
     @NotNull
     @NotBlank
     @Size(min = 8)
-    @JsonProperty(value = "password")
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull

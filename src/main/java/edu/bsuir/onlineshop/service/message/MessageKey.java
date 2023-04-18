@@ -25,4 +25,6 @@ public class MessageKey {
     public static final String CATEGORY_NOT_FOUND_BY_ID = "category.not-found.by-id";
 
     public static final String CATEGORY_ALREADY_EXISTS_BY_NAME = "category.already-exists.by-name";
+
+    public static final String SIZE_NOT_FOUND_BY_ID = "size.not-found.by-id";
 }

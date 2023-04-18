@@ -39,12 +39,6 @@ public class OrderController {
         return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
     }
 
-    @GetMapping("/orders/{id}")
-    public OrderModel findById(@PathVariable Long id) {
-        Order order = orderService.findById(id);
-        return orderMapper.mapToModel(order);
-    }
-
     @GetMapping("/users/{userId}/orders")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public PagedModel<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
@@ -52,10 +46,17 @@ public class OrderController {
         return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
     }
 
-    @GetMapping("/users/{userId}/orders/{orderId}")
-    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public OrderModel findByUserAndOrderId(@PathVariable Long userId, @PathVariable Long orderId) {
-        Order order = orderService.findById(orderId);
+    @GetMapping("/products/{productId}/orders")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PagedModel<OrderModel> findAllByProductId(
+            @PathVariable Long productId, @PageableDefault Pageable pageable) {
+        Page<Order> orders = orderService.findAllByProductId(productId, pageable);
+        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
+    }
+
+    @GetMapping("/orders/{id}")
+    public OrderModel findById(@PathVariable Long id) {
+        Order order = orderService.findById(id);
         return orderMapper.mapToModel(order);
     }
 

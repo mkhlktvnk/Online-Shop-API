@@ -30,7 +30,7 @@ public class Role implements GrantedAuthority {
     private Collection<User> users;
 
     public Role(RoleType roleType) {
-        this.authority = roleType.getRoleName();
+        this.authority = roleType.name();
     }
 
     @Override

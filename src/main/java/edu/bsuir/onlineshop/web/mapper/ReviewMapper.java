@@ -1,18 +1,51 @@
 package edu.bsuir.onlineshop.web.mapper;
 
 import edu.bsuir.onlineshop.domain.entity.Review;
+import edu.bsuir.onlineshop.web.controller.ProductController;
+import edu.bsuir.onlineshop.web.controller.ReviewController;
+import edu.bsuir.onlineshop.web.controller.UserController;
 import edu.bsuir.onlineshop.web.model.ReviewModel;
-import org.mapstruct.Mapper;
+import edu.bsuir.onlineshop.web.model.UserModel;
+import org.mapstruct.*;
+import org.springframework.http.HttpMethod;
 
 import java.util.Collection;
 
-@Mapper
-public interface ReviewMapper {
-    Review mapToEntity(ReviewModel reviewModel);
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Mapper(uses = {
+        UserMapper.class,
+        ProductMapper.class
+})
+public interface ReviewMapper {
+
+    @Mappings({
+            @Mapping(target = "userModel", source = "user"),
+            @Mapping(target = "productModel", source = "product")
+    })
     ReviewModel mapToModel(Review review);
+
+    Review mapToEntity(ReviewModel reviewModel);
 
     Collection<Review> mapToEntity(Collection<ReviewModel> reviewModels);
 
     Collection<ReviewModel> mapToModel(Collection<Review> reviews);
+
+    @AfterMapping
+    default void addLinks(@MappingTarget ReviewModel reviewModel) {
+        reviewModel.add(
+                linkTo(methodOn(ReviewController.class)
+                        .findById(reviewModel.getId()))
+                        .withSelfRel()
+                        .withType(HttpMethod.GET.name()),
+                linkTo(methodOn(ProductController.class)
+                        .getProductById(reviewModel.getProductModel().getId()))
+                        .withRel("product"),
+                linkTo(methodOn(UserController.class)
+                        .findByUsername(reviewModel.getUserModel().getUsername()))
+                        .withRel("author")
+        );
+    }
+
 }

@@ -1,6 +1,7 @@
 package edu.bsuir.onlineshop.web.controller;
 
 import edu.bsuir.onlineshop.domain.entity.Order;
+import edu.bsuir.onlineshop.domain.entity.User;
 import edu.bsuir.onlineshop.service.OrderService;
 import edu.bsuir.onlineshop.web.mapper.OrderMapper;
 import edu.bsuir.onlineshop.web.model.OrderModel;
@@ -15,6 +16,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,11 +59,11 @@ public class OrderController {
         return orderMapper.mapToModel(order);
     }
 
-    @PostMapping("/users/{userId}/orders")
+    @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public OrderModel makeOrder(@PathVariable Long userId, @Valid @RequestBody OrderRequest orderRequest) {
-        Order order = orderService.makeOrder(userId, orderRequest);
+    public OrderModel makeOrder(
+            @AuthenticationPrincipal User user, @Valid @RequestBody OrderRequest orderRequest) {
+        Order order = orderService.makeOrder(user.getId(), orderRequest);
         return orderMapper.mapToModel(order);
     }
 }

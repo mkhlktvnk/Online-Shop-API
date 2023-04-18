@@ -30,24 +30,47 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/api/v0/authenticate", "/api/v0/register")
-                    .permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v0/products/**")
-                    .permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v0/brands/**")
-                    .permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v0/products/**")
-                    .hasRole(RoleType.ADMIN.getRoleName())
-                .requestMatchers(HttpMethod.POST, "/api/v0/brands/**")
-                    .hasRole(RoleType.ADMIN.getRoleName())
-                .requestMatchers(HttpMethod.PUT, "/api/v0/products/**")
-                    .hasRole(RoleType.ADMIN.getRoleName())
-                .requestMatchers(HttpMethod.PUT, "/api/v0/brands/**")
-                    .hasRole(RoleType.ADMIN.getRoleName())
-                .requestMatchers(HttpMethod.DELETE)
-                    .hasRole(RoleType.ADMIN.getRoleName())
-                .requestMatchers("/api/v0/users/**")
-                    .fullyAuthenticated()
+                .requestMatchers(HttpMethod.POST,
+                        "/api/v0/authenticate",
+                        "/api/v0/register"
+                ).permitAll()
+                .requestMatchers(HttpMethod.GET,
+                        "/api/v0/categories/**",
+                        "/api/v0/products/**",
+                        "/api/v0/reviews/**",
+                        "/api/v0/brands/**"
+                ).permitAll()
+                .requestMatchers(HttpMethod.GET,
+                        "/api/v0/orders/**",
+                        "/api/v0/users/**"
+                ).fullyAuthenticated()
+                .requestMatchers(HttpMethod.POST,
+                        "/api/v0/reviews",
+                        "/api/v0/orders"
+                ).fullyAuthenticated()
+                .requestMatchers(HttpMethod.POST,
+                        "/api/v0/categories",
+                        "/api/v0/products",
+                        "/api/v0/brands"
+                ).hasRole(RoleType.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT,
+                        "/api/v0/reviews",
+                        "/api/v0/orders"
+                ).hasRole(RoleType.USER.name())
+                .requestMatchers(HttpMethod.PUT,
+                        "/api/v0/categories/**",
+                        "/api/v0/products/**",
+                        "/api/v0/brands/**"
+                ).hasRole(RoleType.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE,
+                        "/api/v0/reviews",
+                        "/api/v0/orders"
+                ).hasRole(RoleType.USER.name())
+                .requestMatchers(HttpMethod.DELETE,
+                        "/api/v0/categories/**",
+                        "/api/v0/products/**",
+                        "/api/v0/brands/**"
+                ).hasRole(RoleType.ADMIN.name())
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

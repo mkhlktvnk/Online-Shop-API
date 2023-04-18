@@ -10,11 +10,11 @@ import java.util.List;
 public interface OrderService {
     Page<Order> findAll(Pageable pageable);
 
-    Order findById(long id);
-
-    Order findByUserAndOrderId(long userId, long orderId);
-
     Page<Order> findAllByUserId(long userId, Pageable pageable);
+
+    Page<Order> findAllByProductId(long productId, Pageable pageable);
+
+    Order findById(long id);
 
     Order makeOrder(long userId, OrderRequest orderRequest);
 }

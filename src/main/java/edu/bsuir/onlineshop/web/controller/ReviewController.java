@@ -14,9 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,22 +32,21 @@ public class ReviewController {
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
     @GetMapping("/products/{productId}/reviews")
-    public PagedModel<ReviewModel> getReviewsByProductId(
+    public PagedModel<ReviewModel> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findByProductId(productId, pageable);
         return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
     }
 
     @GetMapping("/users/{userId}/reviews")
-    @PreAuthorize("#userId == authentication.principal.id")
     public PagedModel<ReviewModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findAllByUserId(userId, pageable);
         return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
     }
 
-    @GetMapping("/products/{productId}/reviews/{reviewId}")
-    public ReviewModel findByUserAndReviewId(@PathVariable Long productId, @PathVariable Long reviewId) {
-        return mapper.mapToModel(reviewService.findByProductAndReviewId(productId, reviewId));
+    @GetMapping("/reviews/{id}")
+    public ReviewModel findById(@PathVariable Long id) {
+        return mapper.mapToModel(reviewService.findById(id));
     }
 
     @PostMapping("/products/{productId}/reviews")
@@ -59,12 +56,5 @@ public class ReviewController {
             @Valid @RequestBody ReviewModel reviewModel) {
         Review review = mapper.mapToEntity(reviewModel);
         return mapper.mapToModel(reviewService.makeReview(user.getId(), productId, review));
-    }
-
-    @DeleteMapping("/users/{userId}/reviews/{reviewId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("#userId == authentication.principal.id")
-    public void deleteReviewByUserAndReviewId(@PathVariable Long userId, @PathVariable Long reviewId) {
-        reviewService.deleteByUserAndReviewId(userId, reviewId);
     }
 }

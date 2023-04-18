@@ -61,7 +61,7 @@ public class ImageController {
     }
 
     @DeleteMapping("/products/{productId}/images/{imageId}")
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteImageById(@PathVariable Long productId, @PathVariable Long imageId) {
         imageService.deleteImage(productId, imageId);

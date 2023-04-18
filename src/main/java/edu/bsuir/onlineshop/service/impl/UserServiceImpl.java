@@ -6,8 +6,8 @@ import edu.bsuir.onlineshop.domain.entity.enums.RoleType;
 import edu.bsuir.onlineshop.domain.repository.RoleRepository;
 import edu.bsuir.onlineshop.domain.repository.UserRepository;
 import edu.bsuir.onlineshop.service.UserService;
-import edu.bsuir.onlineshop.service.exception.EntityAlreadyExistsException;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceAlreadyPresentException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.USER_NOT_FOUND_BY_ID, id)
                 ));
     }
@@ -48,19 +48,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User insert(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_EMAIL,
                             user.getEmail())
             );
         }
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_USERNAME,
                             user.getUsername())
             );
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_PHONE_NUMBER,
                             user.getUsername())
             );
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage("user.not-found")
                 ));
     }

@@ -4,9 +4,8 @@ import edu.bsuir.onlineshop.domain.entity.Product;
 import edu.bsuir.onlineshop.domain.repository.CategoryRepository;
 import edu.bsuir.onlineshop.domain.repository.ProductRepository;
 import edu.bsuir.onlineshop.domain.spec.ProductSpecifications;
-import edu.bsuir.onlineshop.service.CategoryService;
 import edu.bsuir.onlineshop.service.ProductService;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.criteria.ProductCriteria;
@@ -31,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, id)
                 ));
         productToUpdate.setName(product.getName());
@@ -44,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, id)
             );
         }
@@ -54,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, id)
                 ));
     }
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> findAllByCategoryId(long categoryId, Pageable pageable) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID)
             );
         }

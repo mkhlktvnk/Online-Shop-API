@@ -3,8 +3,8 @@ package edu.bsuir.onlineshop.service.impl;
 import edu.bsuir.onlineshop.domain.entity.Brand;
 import edu.bsuir.onlineshop.domain.repository.BrandRepository;
 import edu.bsuir.onlineshop.service.BrandService;
-import edu.bsuir.onlineshop.service.exception.EntityAlreadyExistsException;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceAlreadyPresentException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +23,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public Brand insert(Brand brand) {
         if (brandRepository.existsByName(brand.getName())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messages.getMessage(
                             MessageKey.BRAND_ALREADY_EXISTS_WITH_NAME,
                             brand.getName()
@@ -40,7 +37,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public void update(Long id, Brand brand) {
         Brand brandToUpdate = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id)
                 ));
         brandToUpdate.setName(brand.getName());
@@ -52,7 +49,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public void delete(Long id) {
         if (!brandRepository.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id)
             );
         }
@@ -62,7 +59,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Brand findById(Long id) {
         return brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.BRAND_NOT_FOUND_BY_ID, id))
                 );
     }

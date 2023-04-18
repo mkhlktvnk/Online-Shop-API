@@ -4,8 +4,8 @@ import edu.bsuir.onlineshop.domain.entity.Category;
 import edu.bsuir.onlineshop.domain.repository.CategoryRepository;
 import edu.bsuir.onlineshop.domain.repository.ProductRepository;
 import edu.bsuir.onlineshop.service.CategoryService;
-import edu.bsuir.onlineshop.service.exception.EntityAlreadyExistsException;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceAlreadyPresentException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.criteria.CategoryCriteria;
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Page<Category> findAllByProductId(long productId, Pageable pageable) {
         if (!productRepository.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messagesSource.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findById(long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
                 ));
     }
@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category insert(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messagesSource.getMessage(
                             MessageKey.CATEGORY_ALREADY_EXISTS_BY_NAME,
                             category.getName()
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void updateById(long id, Category updateCategory) {
         if (categoryRepository.existsByName(updateCategory.getName())) {
-            throw new EntityAlreadyExistsException(
+            throw new ResourceAlreadyPresentException(
                     messagesSource.getMessage(
                             MessageKey.CATEGORY_ALREADY_EXISTS_BY_NAME,
                             updateCategory.getName()
@@ -81,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
             );
         }
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
                 ));
         category.setName(updateCategory.getName());
@@ -93,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void deleteById(long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messagesSource.getMessage(MessageKey.CATEGORY_NOT_FOUND_BY_ID, id)
             );
         }

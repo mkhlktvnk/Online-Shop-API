@@ -5,7 +5,7 @@ import edu.bsuir.onlineshop.domain.entity.Product;
 import edu.bsuir.onlineshop.domain.repository.ImageRepository;
 import edu.bsuir.onlineshop.service.ImageService;
 import edu.bsuir.onlineshop.service.ProductService;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +40,13 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     public void updateImage(long productId, long imageId, Image updateImage) {
         if (!productService.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
 
         Image image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.IMAGE_NOT_FOUND_BY_ID, imageId)
                 ));
 
@@ -58,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     public void deleteImage(long productId, long imageId) {
         if (!productService.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }

@@ -7,7 +7,7 @@ import edu.bsuir.onlineshop.domain.repository.OrderRepository;
 import edu.bsuir.onlineshop.service.OrderService;
 import edu.bsuir.onlineshop.service.ProductService;
 import edu.bsuir.onlineshop.service.UserService;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.payload.request.OrderRequest;
@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Page<Order> findAllByUserId(long userId, Pageable pageable) {
         if (!userService.existsById(userId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.USER_NOT_FOUND_BY_ID, userId)
             );
         }
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Page<Order> findAllByProductId(long productId, Pageable pageable) {
         if (!productService.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.ORDER_NOT_FOUND_BY_ID, id)
                 ));
     }

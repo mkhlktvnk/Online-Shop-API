@@ -7,7 +7,7 @@ import edu.bsuir.onlineshop.domain.repository.ReviewRepository;
 import edu.bsuir.onlineshop.service.ProductService;
 import edu.bsuir.onlineshop.service.ReviewService;
 import edu.bsuir.onlineshop.service.UserService;
-import edu.bsuir.onlineshop.service.exception.EntityNotFoundException;
+import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review findById(Long id) {
         return reviewRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
                 ));
     }
@@ -38,12 +36,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public Review findByProductAndReviewId(long productId, long reviewId) {
         if (!productService.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
         return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, reviewId)
                 ));
     }
@@ -61,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Page<Review> findByProductId(Long productId, Pageable pageable) {
         if (!productService.existsById(productId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.PRODUCT_NOT_FOUND_BY_ID, productId)
             );
         }
@@ -89,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void update(Long id, Review review) {
         Review reviewToUpdate = reviewRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
                 ));
         reviewToUpdate.setId(id);
@@ -103,7 +101,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
             );
         }
@@ -114,12 +112,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void deleteByUserAndReviewId(long userId, long reviewId) {
         if (!userService.existsById(userId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.USER_NOT_FOUND_BY_ID, userId)
             );
         }
         if (!reviewRepository.existsById(reviewId)) {
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, reviewId)
             );
         }

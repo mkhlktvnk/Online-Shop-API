@@ -1,5 +1,6 @@
 package edu.bsuir.onlineshop.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -39,4 +40,10 @@ public class ReviewModel extends RepresentationModel<ProductModel> {
     @Max(5)
     @JsonProperty("mark")
     private Integer mark;
+
+    @JsonIgnore
+    private ProductModel productModel;
+
+    @JsonIgnore
+    private UserModel userModel;
 }

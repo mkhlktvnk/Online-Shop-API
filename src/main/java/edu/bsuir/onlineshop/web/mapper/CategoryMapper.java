@@ -2,6 +2,7 @@ package edu.bsuir.onlineshop.web.mapper;
 
 import edu.bsuir.onlineshop.domain.entity.Category;
 import edu.bsuir.onlineshop.web.controller.CategoryController;
+import edu.bsuir.onlineshop.web.controller.ProductController;
 import edu.bsuir.onlineshop.web.model.CategoryModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -37,7 +38,11 @@ public interface CategoryMapper {
                         .slash("categories")
                         .slash(categoryModel.getId())
                         .withRel("delete")
-                        .withType(HttpMethod.DELETE.name())
+                        .withType(HttpMethod.DELETE.name()),
+                linkTo(methodOn(ProductController.class)
+                        .findAllByCategoryId(categoryModel.getId(), null))
+                        .withRel("products")
+                        .withType(HttpMethod.GET.name())
         );
     }
 }

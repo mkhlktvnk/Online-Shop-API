@@ -14,10 +14,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,7 +42,9 @@ public class ReviewController {
     }
 
     @GetMapping("/users/{userId}/reviews")
-    public PagedModel<ReviewModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
+    public PagedModel<ReviewModel> findAllByUserId(
+            @PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findAllByUserId(userId, pageable);
         return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
     }
@@ -56,5 +61,20 @@ public class ReviewController {
             @Valid @RequestBody ReviewModel reviewModel) {
         Review review = mapper.mapToEntity(reviewModel);
         return mapper.mapToModel(reviewService.makeReview(user.getId(), productId, review));
+    }
+
+    @PutMapping("/users/{userId}/reviews/{reviewId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("#userId == authentication.principal.id")
+    public void updateById(@PathVariable Long userId, @PathVariable Long reviewId,
+                           @RequestBody ReviewModel reviewModel) {
+        reviewService.update(reviewId, mapper.mapToEntity(reviewModel));
+    }
+
+    @DeleteMapping("/users/{userId}/reviews/{reviewId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("#userId == authentication.principal.id")
+    public void deleteById(@PathVariable Long userId, @PathVariable Long reviewId) {
+        reviewService.delete(reviewId);
     }
 }

@@ -2,6 +2,7 @@ package edu.bsuir.onlineshop.web.mapper;
 
 import edu.bsuir.onlineshop.domain.entity.Product;
 import edu.bsuir.onlineshop.web.controller.CategoryController;
+import edu.bsuir.onlineshop.web.controller.OrderController;
 import edu.bsuir.onlineshop.web.controller.ProductController;
 import edu.bsuir.onlineshop.web.controller.ReviewController;
 import edu.bsuir.onlineshop.web.model.ProductModel;
@@ -54,9 +55,17 @@ public interface ProductMapper {
                         .withRel("categories")
                         .withType(HttpMethod.GET.name()),
                 linkTo(methodOn(ReviewController.class)
-                        .getReviewsByProductId(productModel.getId(), null))
+                        .findAllByProductId(productModel.getId(), null))
                         .withRel("reviews")
-                        .withType(HttpMethod.GET.name())
+                        .withType(HttpMethod.GET.name()),
+                linkTo(methodOn(OrderController.class)
+                        .makeOrder(null, null))
+                        .withRel("makeOrder")
+                        .withType(HttpMethod.POST.name()),
+                linkTo(methodOn(ReviewController.class)
+                        .makeReview(null, productModel.getId(), null))
+                        .withRel("makeReview")
+                        .withType(HttpMethod.POST.name())
         );
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.hateoas.server.core.Relation;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Relation(itemRelation = "review", collectionRelation = "reviews")
-public class ReviewModel extends RepresentationModel<ProductModel> {
+public class ReviewModel extends RepresentationModel<ReviewModel> {
 
     @NotNull
     @Min(0)

@@ -52,7 +52,4 @@ public class ProductModel extends RepresentationModel<ProductModel> {
 
     @JsonProperty("images")
     private Set<ImageModel> images;
-
-    @JsonProperty("sizes")
-    private Set<SizeModel> sizes;
 }

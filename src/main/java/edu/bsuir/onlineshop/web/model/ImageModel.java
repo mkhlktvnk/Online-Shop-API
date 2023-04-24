@@ -13,7 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Relation(itemRelation = "image", collectionRelation = "images")
-public class ImageModel extends RepresentationModel<CategoryModel> {
+public class ImageModel extends RepresentationModel<ImageModel> {
 
     @NotNull
     @Min(0)

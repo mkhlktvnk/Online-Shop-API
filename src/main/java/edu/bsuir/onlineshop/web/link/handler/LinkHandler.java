@@ -1,4 +1,4 @@
-package edu.bsuir.onlineshop.web.model.link.handler;
+package edu.bsuir.onlineshop.web.link.handler;
 
 import edu.bsuir.onlineshop.domain.entity.User;
 import edu.bsuir.onlineshop.domain.entity.enums.RoleType;

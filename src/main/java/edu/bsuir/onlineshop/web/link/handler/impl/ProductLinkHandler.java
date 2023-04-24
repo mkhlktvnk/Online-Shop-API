@@ -1,11 +1,11 @@
-package edu.bsuir.onlineshop.web.model.link.handler.impl;
+package edu.bsuir.onlineshop.web.link.handler.impl;
 
 import edu.bsuir.onlineshop.web.controller.CategoryController;
 import edu.bsuir.onlineshop.web.controller.OrderController;
 import edu.bsuir.onlineshop.web.controller.ProductController;
 import edu.bsuir.onlineshop.web.controller.ReviewController;
+import edu.bsuir.onlineshop.web.link.handler.LinkHandler;
 import edu.bsuir.onlineshop.web.model.ProductModel;
-import edu.bsuir.onlineshop.web.model.link.handler.LinkHandler;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 

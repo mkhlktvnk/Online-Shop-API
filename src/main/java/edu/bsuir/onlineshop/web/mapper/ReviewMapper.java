@@ -32,20 +32,4 @@ public interface ReviewMapper {
 
     Collection<ReviewModel> mapToModel(Collection<Review> reviews);
 
-    @AfterMapping
-    default void addLinks(@MappingTarget ReviewModel reviewModel) {
-        reviewModel.add(
-                linkTo(methodOn(ReviewController.class)
-                        .findById(reviewModel.getId()))
-                        .withSelfRel()
-                        .withType(HttpMethod.GET.name()),
-                linkTo(methodOn(ProductController.class)
-                        .getProductById(reviewModel.getProductModel().getId()))
-                        .withRel("product"),
-                linkTo(methodOn(UserController.class)
-                        .findByUsername(reviewModel.getUserModel().getUsername()))
-                        .withRel("author")
-        );
-    }
-
 }

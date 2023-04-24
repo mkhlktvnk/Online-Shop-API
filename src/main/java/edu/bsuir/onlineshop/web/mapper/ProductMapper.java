@@ -28,44 +28,4 @@ public interface ProductMapper {
     Collection<Product> mapToEntity(Collection<ProductModel> productModels);
 
     Collection<ProductModel> mapToModel(Collection<Product> products);
-
-    @AfterMapping
-    default void addLinks(@MappingTarget ProductModel productModel) {
-        productModel.add(
-                linkTo(methodOn(ProductController.class)
-                        .getProductById(productModel.getId()))
-                        .withSelfRel()
-                        .withType(HttpMethod.GET.name()),
-                linkTo(methodOn(ProductController.class)
-                        .insertProduct(productModel))
-                        .withRel("create")
-                        .withType(HttpMethod.POST.name()),
-                linkTo(methodOn(ProductController.class))
-                        .slash("products")
-                        .slash(productModel.getId())
-                        .withRel("update")
-                        .withType(HttpMethod.PUT.name()),
-                linkTo(methodOn(ProductController.class))
-                        .slash("products")
-                        .slash(productModel.getId())
-                        .withRel("delete")
-                        .withType(HttpMethod.DELETE.name()),
-                linkTo(methodOn(CategoryController.class)
-                        .findAllByProductId(productModel.getId(), null))
-                        .withRel("categories")
-                        .withType(HttpMethod.GET.name()),
-                linkTo(methodOn(ReviewController.class)
-                        .findAllByProductId(productModel.getId(), null))
-                        .withRel("reviews")
-                        .withType(HttpMethod.GET.name()),
-                linkTo(methodOn(OrderController.class)
-                        .makeOrder(null, null))
-                        .withRel("makeOrder")
-                        .withType(HttpMethod.POST.name()),
-                linkTo(methodOn(ReviewController.class)
-                        .makeReview(null, productModel.getId(), null))
-                        .withRel("makeReview")
-                        .withType(HttpMethod.POST.name())
-        );
-    }
 }

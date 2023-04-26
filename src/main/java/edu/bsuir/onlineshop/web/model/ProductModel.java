@@ -50,6 +50,4 @@ public class ProductModel extends RepresentationModel<ProductModel> {
     @JsonProperty("seasonType")
     private SeasonType seasonType;
 
-    @JsonProperty("images")
-    private Set<ImageModel> images;
 }

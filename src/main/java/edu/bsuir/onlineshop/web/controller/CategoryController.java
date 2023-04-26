@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,20 +31,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     private final CategoryService categoryService;
     private final PagedResourcesAssembler<Category> pagedResourcesAssembler;
+    private final RepresentationModelAssembler<Category, CategoryModel> modelAssembler;
     private final CategoryMapper mapper = Mappers.getMapper(CategoryMapper.class);
 
     @GetMapping("/categories")
     public PagedModel<CategoryModel> findAllByPageableAndCriteria(
             @PageableDefault Pageable pageable, @Valid CategoryCriteria criteria) {
         Page<Category> categories = categoryService.findAll(pageable, criteria);
-        return pagedResourcesAssembler.toModel(categories, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(categories, modelAssembler);
     }
 
     @GetMapping("/products/{productId}/categories")
     public PagedModel<CategoryModel> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Category> categories = categoryService.findAllByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(categories, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(categories, modelAssembler);
     }
 
     @GetMapping("/categories/{id}")
@@ -57,7 +59,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryModel save(@Valid @RequestBody CategoryModel categoryModel) {
         Category category = mapper.mapToEntity(categoryModel);
-        return mapper.mapToModel(
+        return modelAssembler.toModel(
                 categoryService.insert(category)
         );
     }

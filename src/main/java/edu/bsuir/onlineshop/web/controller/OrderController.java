@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,19 +32,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
     private final OrderService orderService;
     private final PagedResourcesAssembler<Order> pagedResourcesAssembler;
-    private final OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);
+    private final RepresentationModelAssembler<Order, OrderModel> modelAssembler;
 
     @GetMapping("/orders")
     public PagedModel<OrderModel> findAll(@PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAll(pageable);
-        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
+        return pagedResourcesAssembler.toModel(orders, modelAssembler);
     }
 
     @GetMapping("/users/{userId}/orders")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public PagedModel<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAllByUserId(userId, pageable);
-        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
+        return pagedResourcesAssembler.toModel(orders, modelAssembler);
     }
 
     @GetMapping("/products/{productId}/orders")
@@ -51,13 +52,13 @@ public class OrderController {
     public PagedModel<OrderModel> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAllByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(orders, orderMapper::mapToModel);
+        return pagedResourcesAssembler.toModel(orders, modelAssembler);
     }
 
     @GetMapping("/orders/{id}")
     public OrderModel findById(@PathVariable Long id) {
         Order order = orderService.findById(id);
-        return orderMapper.mapToModel(order);
+        return modelAssembler.toModel(order);
     }
 
     @PostMapping("/orders")
@@ -65,6 +66,6 @@ public class OrderController {
     public OrderModel makeOrder(
             @AuthenticationPrincipal User user, @Valid @RequestBody OrderRequest orderRequest) {
         Order order = orderService.makeOrder(user.getId(), orderRequest);
-        return orderMapper.mapToModel(order);
+        return modelAssembler.toModel(order);
     }
 }

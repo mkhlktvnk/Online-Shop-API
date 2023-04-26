@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,20 +24,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v0")
 @RequiredArgsConstructor
 public class BrandController {
     private final BrandService brandService;
     private final PagedResourcesAssembler<Brand> pagedResourcesAssembler;
+    private final RepresentationModelAssembler<Brand, BrandModel> modelAssembler;
     private final BrandMapper mapper = Mappers.getMapper(BrandMapper.class);
 
     @GetMapping("/brands")
     public PagedModel<BrandModel> getBrands(@PageableDefault Pageable pageable) {
         Page<Brand> brands = brandService.findAll(pageable);
-        return pagedResourcesAssembler.toModel(brands, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(brands, modelAssembler);
     }
 
     @GetMapping("/brands/{id}")
@@ -47,7 +47,7 @@ public class BrandController {
     @PostMapping("/brands")
     @ResponseStatus(HttpStatus.CREATED)
     public BrandModel insertBrand(@Valid @RequestBody BrandModel brand) {
-        return mapper.mapToModel(
+        return modelAssembler.toModel(
                 brandService.insert(mapper.mapToEntity(brand))
         );
     }

@@ -1,6 +1,7 @@
 package edu.bsuir.onlineshop.web.link.handler.impl;
 
 import edu.bsuir.onlineshop.web.controller.CategoryController;
+import edu.bsuir.onlineshop.web.controller.ImageController;
 import edu.bsuir.onlineshop.web.controller.OrderController;
 import edu.bsuir.onlineshop.web.controller.ProductController;
 import edu.bsuir.onlineshop.web.controller.ReviewController;
@@ -29,6 +30,10 @@ public class ProductLinkHandler extends LinkHandler<ProductModel> {
                 linkTo(methodOn(ReviewController.class)
                         .findAllByProductId(model.getId(), null))
                         .withRel("reviews")
+                        .withType(HttpMethod.GET.name()),
+                linkTo(methodOn(ImageController.class)
+                        .findAllByProductId(model.getId(), null))
+                        .withRel("images")
                         .withType(HttpMethod.GET.name())
         );
     }

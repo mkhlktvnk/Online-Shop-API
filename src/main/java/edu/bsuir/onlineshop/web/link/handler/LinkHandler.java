@@ -4,6 +4,7 @@ import edu.bsuir.onlineshop.domain.entity.User;
 import edu.bsuir.onlineshop.domain.entity.enums.RoleType;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -21,12 +22,13 @@ public abstract class LinkHandler<T extends RepresentationModel<T>> {
         });
     }
 
-    private Optional<User> getCurrentUser() {
-        return Optional.of(
-                (User) SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getPrincipal()
-        );
+    private Optional<UserDetails> getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return Optional.of((UserDetails) principal);
+        } else {
+            return Optional.empty();
+        }
     }
 
     protected abstract void addCommonLinks(T model);

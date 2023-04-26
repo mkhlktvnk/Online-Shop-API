@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,31 +31,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
     private final ProductService productService;
     private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
+    private final RepresentationModelAssembler<Product, ProductModel> modelAssembler;
     private final ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 
     @GetMapping("/products")
     public PagedModel<ProductModel> findAllByPageableAndCriteria(
             @PageableDefault Pageable pageable, @Valid ProductCriteria criteria) {
         Page<Product> products = productService.findAll(pageable, criteria);
-        return pagedResourcesAssembler.toModel(products, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(products, modelAssembler);
     }
 
     @GetMapping("/categories/{categoryId}/products")
     public PagedModel<ProductModel> findAllByCategoryId(
             @PathVariable Long categoryId, @PageableDefault Pageable pageable) {
         Page<Product> products = productService.findAllByCategoryId(categoryId, pageable);
-        return pagedResourcesAssembler.toModel(products, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(products, modelAssembler);
     }
 
     @GetMapping("/products/{id}")
     public ProductModel getProductById(@PathVariable Long id) {
-        return mapper.mapToModel(productService.findById(id));
+        return modelAssembler.toModel(productService.findById(id));
     }
 
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductModel insertProduct(@Valid @RequestBody ProductModel product) {
-        return mapper.mapToModel(
+        return modelAssembler.toModel(
                 productService.insert(mapper.mapToEntity(product))
         );
     }

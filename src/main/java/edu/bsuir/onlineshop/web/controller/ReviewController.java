@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,13 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewController {
     private final ReviewService reviewService;
     private final PagedResourcesAssembler<Review> pagedResourcesAssembler;
+    private final RepresentationModelAssembler<Review, ReviewModel> modelAssembler;
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
     @GetMapping("/products/{productId}/reviews")
     public PagedModel<ReviewModel> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(reviews, modelAssembler);
     }
 
     @GetMapping("/users/{userId}/reviews")
@@ -46,7 +48,7 @@ public class ReviewController {
     public PagedModel<ReviewModel> findAllByUserId(
             @PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findAllByUserId(userId, pageable);
-        return pagedResourcesAssembler.toModel(reviews, mapper::mapToModel);
+        return pagedResourcesAssembler.toModel(reviews, modelAssembler);
     }
 
     @GetMapping("/reviews/{id}")
@@ -60,7 +62,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user, @PathVariable Long productId,
             @Valid @RequestBody ReviewModel reviewModel) {
         Review review = mapper.mapToEntity(reviewModel);
-        return mapper.mapToModel(reviewService.makeReview(user.getId(), productId, review));
+        return modelAssembler.toModel(reviewService.makeReview(user.getId(), productId, review));
     }
 
     @PutMapping("/users/{userId}/reviews/{reviewId}")

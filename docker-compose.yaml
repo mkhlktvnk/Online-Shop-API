@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  database:
+  postgres:
     image: 'postgres:14.1-alpine'
     container_name: database
     ports:
@@ -9,6 +9,14 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - backend_network
+
+  redis:
+    image: 'redis:6.2.6-alpine'
+    container_name: redis
+    ports:
+      - "6379:6379"
     networks:
       - backend_network
 

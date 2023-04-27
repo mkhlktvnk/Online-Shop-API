@@ -10,6 +10,9 @@ import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.criteria.ProductCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,11 +26,13 @@ public class ProductServiceImpl implements ProductService {
     private final MessagesSource messages;
 
     @Override
+    @CachePut(value = "product", key = "#result.id")
     public Product insert(Product product) {
         return productRepository.save(product);
     }
 
     @Override
+    @CachePut(value = "product", key = "#id")
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -41,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "product", key = "#id")
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException(
@@ -51,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "product", key = "#id")
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(

@@ -9,12 +9,16 @@ import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
@@ -28,6 +32,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
+    @CachePut(value = "image", key = "#result.id")
     public Image addImageToProduct(long productId, Image image) {
         Product product = productService.findById(productId);
 
@@ -38,6 +43,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
+    @CachePut(value = "image", key = "#imageId")
     public void updateImage(long productId, long imageId, Image updateImage) {
         if (!productService.existsById(productId)) {
             throw new ResourceNotFoundException(
@@ -56,6 +62,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "image", key = "#imageId")
     public void deleteImage(long productId, long imageId) {
         if (!productService.existsById(productId)) {
             throw new ResourceNotFoundException(

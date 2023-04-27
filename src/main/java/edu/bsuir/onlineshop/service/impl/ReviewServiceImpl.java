@@ -11,6 +11,9 @@ import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final MessagesSource messages;
 
     @Override
+    @Cacheable(value = "review", key = "#id")
     public Review findById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -67,12 +71,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CachePut(value = "review", key = "#result.id")
     public Review insert(Review review) {
         return reviewRepository.save(review);
     }
 
     @Override
     @Transactional
+    @CachePut(value = "review", key = "#result.id")
     public Review makeReview(long userId, long productId, Review review) {
         User user = userService.findById(userId);
         Product product = productService.findById(productId);
@@ -85,6 +91,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
+    @CachePut(value = "review", key = "#id")
     public void update(Long id, Review review) {
         Review reviewToUpdate = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -99,6 +106,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "review", key = "#id")
     public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new ResourceNotFoundException(
@@ -110,6 +118,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "review", key = "#reviewId")
     public void deleteByUserAndReviewId(long userId, long reviewId) {
         if (!userService.existsById(userId)) {
             throw new ResourceNotFoundException(

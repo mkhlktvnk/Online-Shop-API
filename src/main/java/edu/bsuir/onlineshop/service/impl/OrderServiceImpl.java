@@ -12,6 +12,8 @@ import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.payload.request.OrderRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(value = "order", key = "#id")
     public Order findById(long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -62,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    @CachePut(value = "order", key = "#result.id")
     public Order makeOrder(long userId, OrderRequest orderRequest) {
         User user = userService.findById(userId);
         Product product = productService.findById(orderRequest.getProductId());

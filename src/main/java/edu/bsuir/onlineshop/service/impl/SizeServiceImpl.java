@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SizeServiceImpl implements SizeService {
     private final SizeRepository sizeRepository;
     private final ProductService productService;
@@ -23,7 +24,7 @@ public class SizeServiceImpl implements SizeService {
 
     @Override
     public Page<Size> findAllByProductId(long productId, Pageable pageable) {
-        return null;
+        return sizeRepository.findAllByProductId(productId, pageable);
     }
 
     @Override

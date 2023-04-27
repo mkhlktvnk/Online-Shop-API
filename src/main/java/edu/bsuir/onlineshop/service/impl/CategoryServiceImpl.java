@@ -10,6 +10,9 @@ import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import edu.bsuir.onlineshop.web.criteria.CategoryCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,6 +24,7 @@ import static edu.bsuir.onlineshop.domain.spec.CategorySpecifications.hasNameLik
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -35,7 +39,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public Page<Category> findAllByProductId(long productId, Pageable pageable) {
         if (!productRepository.existsById(productId)) {
             throw new ResourceNotFoundException(
@@ -47,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "category", key = "#id")
     public Category findById(long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -56,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CachePut(value = "category", key = "#result.id")
     public Category insert(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
             throw new ResourceAlreadyPresentException(
@@ -71,6 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CachePut(value = "category", key = "#result.id")
     public void updateById(long id, Category updateCategory) {
         if (categoryRepository.existsByName(updateCategory.getName())) {
             throw new ResourceAlreadyPresentException(
@@ -91,6 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "category", key = "#result.id")
     public void deleteById(long id) {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException(

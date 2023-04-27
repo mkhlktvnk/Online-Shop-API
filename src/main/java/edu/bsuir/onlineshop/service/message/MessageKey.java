@@ -1,5 +1,6 @@
 package edu.bsuir.onlineshop.service.message;
 
+import jakarta.servlet.http.PushBuilder;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -11,6 +12,8 @@ public class MessageKey {
     public static final String BRAND_ALREADY_EXISTS_WITH_NAME = "brand.already-exists.with-name";
 
     public static final String REVIEW_NOT_FOUND_BY_ID = "review.not-found.by-id";
+
+    public static final String UNABLE_TO_MAKE_REVIEW = "review.unable-to_make";
 
     public static final String USER_NOT_FOUND_BY_ID = "user.not-found.by-id";
 

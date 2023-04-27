@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
@@ -33,7 +34,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public Page<Order> findAllByUserId(long userId, Pageable pageable) {
         if (!userService.existsById(userId)) {
             throw new ResourceNotFoundException(
@@ -44,7 +44,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public Page<Order> findAllByProductId(long productId, Pageable pageable) {
         if (!productService.existsById(productId)) {
             throw new ResourceNotFoundException(
@@ -77,6 +76,11 @@ public class OrderServiceImpl implements OrderService {
         order.setQuantity(orderRequest.getProductQuantity());
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    public boolean existsByUserIdAndOrderId(long userId, long productId) {
+        return orderRepository.existsByUserIdAndProductId(userId, productId);
     }
 
 }

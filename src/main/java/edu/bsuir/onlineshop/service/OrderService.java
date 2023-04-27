@@ -17,4 +17,6 @@ public interface OrderService {
     Order findById(long id);
 
     Order makeOrder(long userId, OrderRequest orderRequest);
+
+    boolean existsByUserIdAndOrderId(long userId, long productId);
 }

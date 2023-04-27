@@ -11,7 +11,6 @@ import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -47,24 +46,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User insert(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ResourceAlreadyPresentException(
-                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_EMAIL,
-                            user.getEmail())
-            );
-        }
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new ResourceAlreadyPresentException(
-                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_USERNAME,
-                            user.getUsername())
-            );
-        }
-        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new ResourceAlreadyPresentException(
-                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_PHONE_NUMBER,
-                            user.getUsername())
-            );
-        }
+        checkUserExistsByEmail(user.getEmail());
+        checkUserExistsByUsername(user.getUsername());
+        checkUserExistsByPhoneNumber(user.getPhoneNumber());
 
         Role role = roleRepository.findByAuthority(RoleType.USER.name())
                 .orElseGet(() -> roleRepository.save(new Role(RoleType.USER)));
@@ -81,11 +65,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.USER_NOT_FOUND_BY_USERNAME, username)
                 ));
+    }
+
+    private void checkUserExistsByEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new ResourceAlreadyPresentException(
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_EMAIL, email)
+            );
+        }
+    }
+
+    private void checkUserExistsByUsername(String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new ResourceAlreadyPresentException(
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_USERNAME, username)
+            );
+        }
+    }
+
+    private void checkUserExistsByPhoneNumber(String phoneNumber) {
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ResourceAlreadyPresentException(
+                    messages.getMessage(MessageKey.USER_ALREADY_EXISTS_WITH_PHONE_NUMBER, phoneNumber)
+            );
+        }
     }
 }

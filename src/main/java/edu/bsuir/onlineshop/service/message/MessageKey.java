@@ -29,4 +29,8 @@ public class MessageKey {
     public static final String SIZE_NOT_FOUND_BY_ID = "size.not-found.by-id";
 
     public static final String IMAGE_NOT_FOUND_BY_ID = "image.not-found.by-id";
+
+    public static final String FORBIDDEN = "resource.forbidden";
+
+    public static final String UNAUTHORIZED = "resource.unauthorized";
 }

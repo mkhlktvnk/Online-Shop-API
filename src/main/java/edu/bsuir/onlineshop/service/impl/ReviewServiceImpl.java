@@ -4,10 +4,12 @@ import edu.bsuir.onlineshop.domain.entity.Product;
 import edu.bsuir.onlineshop.domain.entity.Review;
 import edu.bsuir.onlineshop.domain.entity.User;
 import edu.bsuir.onlineshop.domain.repository.ReviewRepository;
+import edu.bsuir.onlineshop.service.OrderService;
 import edu.bsuir.onlineshop.service.ProductService;
 import edu.bsuir.onlineshop.service.ReviewService;
 import edu.bsuir.onlineshop.service.UserService;
 import edu.bsuir.onlineshop.service.exception.ResourceNotFoundException;
+import edu.bsuir.onlineshop.service.exception.UnableToMakeReviewException;
 import edu.bsuir.onlineshop.service.message.MessageKey;
 import edu.bsuir.onlineshop.service.message.MessagesSource;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
     private final MessagesSource messages;
 
     @Override
@@ -80,6 +83,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @CachePut(value = "review", key = "#result.id")
     public Review makeReview(long userId, long productId, Review review) {
+        if (!orderService.existsByUserIdAndOrderId(userId, productId)) {
+            throw new UnableToMakeReviewException(
+                    messages.getMessage(MessageKey.UNABLE_TO_MAKE_REVIEW)
+            );
+        }
+
         User user = userService.findById(userId);
         Product product = productService.findById(productId);
 
@@ -97,10 +106,12 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         messages.getMessage(MessageKey.REVIEW_NOT_FOUND_BY_ID, id)
                 ));
+
         reviewToUpdate.setId(id);
         reviewToUpdate.setTopic(review.getTopic());
         reviewToUpdate.setContent(review.getContent());
         reviewToUpdate.setMark(review.getMark());
+
         reviewRepository.save(reviewToUpdate);
     }
 

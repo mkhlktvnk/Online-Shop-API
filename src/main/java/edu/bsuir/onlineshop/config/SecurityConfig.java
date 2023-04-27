@@ -1,7 +1,7 @@
 package edu.bsuir.onlineshop.config;
 
 import edu.bsuir.onlineshop.domain.entity.enums.RoleType;
-import edu.bsuir.onlineshop.web.filter.JwtFilter;
+import edu.bsuir.onlineshop.web.security.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;

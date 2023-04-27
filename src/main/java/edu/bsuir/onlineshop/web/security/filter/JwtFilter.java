@@ -1,4 +1,4 @@
-package edu.bsuir.onlineshop.web.filter;
+package edu.bsuir.onlineshop.web.security.filter;
 
 import edu.bsuir.onlineshop.service.JwtService;
 import edu.bsuir.onlineshop.service.UserService;

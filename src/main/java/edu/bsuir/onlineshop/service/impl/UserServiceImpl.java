@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        messages.getMessage("user.not-found")
+                        messages.getMessage(MessageKey.USER_NOT_FOUND_BY_USERNAME, username)
                 ));
     }
 }

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductService productService;
@@ -40,7 +41,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public Review findByProductAndReviewId(long productId, long reviewId) {
         if (!productService.existsById(productId)) {
             throw new ResourceNotFoundException(
@@ -74,6 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     @CachePut(value = "review", key = "#result.id")
     public Review insert(Review review) {
         return reviewRepository.save(review);

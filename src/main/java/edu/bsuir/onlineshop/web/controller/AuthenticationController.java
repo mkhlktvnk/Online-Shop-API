@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +27,18 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserModel register(@Valid @RequestBody UserModel userModel) {
+    public ResponseEntity<UserModel> register(@Valid @RequestBody UserModel userModel) {
         User user = mapper.mapToEntity(userModel);
-        return mapper.mapToModel(authService.register(user));
+        User savedUser = authService.register(user);
+        UserModel savedUserModel = mapper.mapToModel(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserModel);
     }
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public TokenResponse authenticate(@Valid @RequestBody AuthenticationRequest request) {
-        return authService.authenticate(request);
+    public ResponseEntity<TokenResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
+        TokenResponse tokenResponse = authService.authenticate(request);
+        return ResponseEntity.status(HttpStatus.OK).body(tokenResponse);
     }
 }

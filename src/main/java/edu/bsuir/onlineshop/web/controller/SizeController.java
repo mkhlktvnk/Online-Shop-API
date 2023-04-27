@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,22 +32,22 @@ public class SizeController {
     private final SizeMapper sizeMapper = Mappers.getMapper(SizeMapper.class);
 
     @GetMapping("/product/{productId}/sizes")
-    public PagedModel<SizeModel> findAllByProductId(
+    public ResponseEntity<PagedModel<SizeModel>> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Size> sizes = sizeService.findAllByProductId(productId, pageable);
-
-        return pagedResourcesAssembler.toModel(sizes, sizeMapper::mapToModel);
+        PagedModel<SizeModel> page = pagedResourcesAssembler.toModel(sizes, sizeMapper::mapToModel);
+        return ResponseEntity.ok(page);
     }
 
     @PostMapping("/product/{productId}/sizes")
     @ResponseStatus(HttpStatus.CREATED)
-    public SizeModel addSizeToProduct(
+    public ResponseEntity<SizeModel> addSizeToProduct(
             @PathVariable Long productId, @Valid @RequestBody SizeModel sizeModel) {
         Size size = sizeMapper.mapToEntity(sizeModel);
-
-        return sizeMapper.mapToModel(
+        SizeModel createdSize = sizeMapper.mapToModel(
                 sizeService.addSizeToProduct(productId, size)
         );
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSize);
     }
 
     @DeleteMapping("/product/{productId}/sizes/{sizeId}")

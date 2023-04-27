@@ -14,6 +14,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,23 +35,26 @@ public class BrandController {
     private final BrandMapper mapper = Mappers.getMapper(BrandMapper.class);
 
     @GetMapping("/brands")
-    public PagedModel<BrandModel> getBrands(@PageableDefault Pageable pageable) {
+    public ResponseEntity<PagedModel<BrandModel>> getBrands(@PageableDefault Pageable pageable) {
         Page<Brand> brands = brandService.findAll(pageable);
-        return pagedResourcesAssembler.toModel(brands, modelAssembler);
+        PagedModel<BrandModel> page = pagedResourcesAssembler.toModel(brands, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/brands/{id}")
-    public BrandModel getBrandById(@PathVariable Long id) {
-        return mapper.mapToModel(brandService.findById(id));
+    public ResponseEntity<BrandModel> getBrandById(@PathVariable Long id) {
+        BrandModel brandModel = mapper.mapToModel(brandService.findById(id));
+        return ResponseEntity.ok(brandModel);
     }
 
     @PostMapping("/brands")
     @ResponseStatus(HttpStatus.CREATED)
-    public BrandModel insertBrand(@Valid @RequestBody BrandModel brand) {
-        return modelAssembler.toModel(
-                brandService.insert(mapper.mapToEntity(brand))
-        );
+    public ResponseEntity<BrandModel> insertBrand(@Valid @RequestBody BrandModel brand) {
+        Brand savedBrand = brandService.insert(mapper.mapToEntity(brand));
+        BrandModel savedBrandModel = mapper.mapToModel(savedBrand);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBrandModel);
     }
+
 
     @PutMapping("/brands/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

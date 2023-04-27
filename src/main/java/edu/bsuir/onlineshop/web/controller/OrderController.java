@@ -3,12 +3,10 @@ package edu.bsuir.onlineshop.web.controller;
 import edu.bsuir.onlineshop.domain.entity.Order;
 import edu.bsuir.onlineshop.domain.entity.User;
 import edu.bsuir.onlineshop.service.OrderService;
-import edu.bsuir.onlineshop.web.mapper.OrderMapper;
 import edu.bsuir.onlineshop.web.model.OrderModel;
 import edu.bsuir.onlineshop.web.payload.request.OrderRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,6 +14,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,37 +34,43 @@ public class OrderController {
     private final RepresentationModelAssembler<Order, OrderModel> modelAssembler;
 
     @GetMapping("/orders")
-    public PagedModel<OrderModel> findAll(@PageableDefault Pageable pageable) {
+    public ResponseEntity<PagedModel<OrderModel>> findAll(@PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAll(pageable);
-        return pagedResourcesAssembler.toModel(orders, modelAssembler);
+        PagedModel<OrderModel> page = pagedResourcesAssembler.toModel(orders, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/users/{userId}/orders")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public PagedModel<OrderModel> findAllByUserId(@PathVariable Long userId, @PageableDefault Pageable pageable) {
+    public ResponseEntity<PagedModel<OrderModel>> findAllByUserId(
+            @PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAllByUserId(userId, pageable);
-        return pagedResourcesAssembler.toModel(orders, modelAssembler);
+        PagedModel<OrderModel> page = pagedResourcesAssembler.toModel(orders, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/products/{productId}/orders")
     @PreAuthorize("hasRole('ADMIN')")
-    public PagedModel<OrderModel> findAllByProductId(
+    public ResponseEntity<PagedModel<OrderModel>> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Order> orders = orderService.findAllByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(orders, modelAssembler);
+        PagedModel<OrderModel> page = pagedResourcesAssembler.toModel(orders, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/orders/{id}")
-    public OrderModel findById(@PathVariable Long id) {
+    public ResponseEntity<OrderModel> findById(@PathVariable Long id) {
         Order order = orderService.findById(id);
-        return modelAssembler.toModel(order);
+        OrderModel orderModel = modelAssembler.toModel(order);
+        return ResponseEntity.ok(orderModel);
     }
 
     @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderModel makeOrder(
+    public ResponseEntity<OrderModel> makeOrder(
             @AuthenticationPrincipal User user, @Valid @RequestBody OrderRequest orderRequest) {
         Order order = orderService.makeOrder(user.getId(), orderRequest);
-        return modelAssembler.toModel(order);
+        OrderModel orderModel = modelAssembler.toModel(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderModel);
     }
 }

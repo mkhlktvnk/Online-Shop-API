@@ -15,6 +15,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,39 +36,41 @@ public class CategoryController {
     private final CategoryMapper mapper = Mappers.getMapper(CategoryMapper.class);
 
     @GetMapping("/categories")
-    public PagedModel<CategoryModel> findAllByPageableAndCriteria(
+    public ResponseEntity<PagedModel<CategoryModel>> findAllByPageableAndCriteria(
             @PageableDefault Pageable pageable, @Valid CategoryCriteria criteria) {
         Page<Category> categories = categoryService.findAll(pageable, criteria);
-        return pagedResourcesAssembler.toModel(categories, modelAssembler);
+        PagedModel<CategoryModel> pagedModel = pagedResourcesAssembler.toModel(categories, modelAssembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     @GetMapping("/products/{productId}/categories")
-    public PagedModel<CategoryModel> findAllByProductId(
+    public ResponseEntity<PagedModel<CategoryModel>> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Category> categories = categoryService.findAllByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(categories, modelAssembler);
+        PagedModel<CategoryModel> pagedModel = pagedResourcesAssembler.toModel(categories, modelAssembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     @GetMapping("/categories/{id}")
-    public CategoryModel findById(@PathVariable Long id) {
-        return mapper.mapToModel(
-                categoryService.findById(id)
-        );
+    public ResponseEntity<CategoryModel> findById(@PathVariable Long id) {
+        CategoryModel categoryModel = mapper.mapToModel(categoryService.findById(id));
+        return ResponseEntity.ok(categoryModel);
     }
 
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryModel save(@Valid @RequestBody CategoryModel categoryModel) {
+    public ResponseEntity<CategoryModel> save(@Valid @RequestBody CategoryModel categoryModel) {
         Category category = mapper.mapToEntity(categoryModel);
-        return modelAssembler.toModel(
-                categoryService.insert(category)
-        );
+        Category savedCategory = categoryService.insert(category);
+        CategoryModel savedCategoryModel = mapper.mapToModel(savedCategory);
+        return ResponseEntity.ok(savedCategoryModel);
     }
 
     @PutMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable Long id, @Valid @RequestBody CategoryModel categoryModel) {
-        categoryService.updateById(id, mapper.mapToEntity(categoryModel));
+        Category category = mapper.mapToEntity(categoryModel);
+        categoryService.updateById(id, category);
     }
 
     @DeleteMapping("/categories/{id}")
@@ -76,3 +79,4 @@ public class CategoryController {
         categoryService.deleteById(id);
     }
 }
+

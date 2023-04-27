@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +26,16 @@ public class UserController {
     private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @GetMapping("/users")
-    public PagedModel<UserModel> findAll(@PageableDefault Pageable pageable) {
+    public ResponseEntity<PagedModel<UserModel>> findAll(@PageableDefault Pageable pageable) {
         Page<User> users = userService.findAll(pageable);
-        return pagedResourcesAssembler.toModel(users, mapper::mapToModel);
+        PagedModel<UserModel> page = pagedResourcesAssembler.toModel(users, mapper::mapToModel);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/users/{username}")
-    public UserModel findByUsername(@PathVariable String username) {
-        return (UserModel) userService.loadUserByUsername(username);
+    public ResponseEntity<UserModel> findByUsername(@PathVariable String username) {
+        User user = (User) userService.loadUserByUsername(username);
+        UserModel userModel = mapper.mapToModel(user);
+        return ResponseEntity.ok(userModel);
     }
 }

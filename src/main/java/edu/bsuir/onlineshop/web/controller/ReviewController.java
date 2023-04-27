@@ -15,6 +15,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,32 +38,38 @@ public class ReviewController {
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
     @GetMapping("/products/{productId}/reviews")
-    public PagedModel<ReviewModel> findAllByProductId(
+    public ResponseEntity<PagedModel<ReviewModel>> findAllByProductId(
             @PathVariable Long productId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findByProductId(productId, pageable);
-        return pagedResourcesAssembler.toModel(reviews, modelAssembler);
+        PagedModel<ReviewModel> page = pagedResourcesAssembler.toModel(reviews, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/users/{userId}/reviews")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public PagedModel<ReviewModel> findAllByUserId(
+    public ResponseEntity<PagedModel<ReviewModel>> findAllByUserId(
             @PathVariable Long userId, @PageableDefault Pageable pageable) {
         Page<Review> reviews = reviewService.findAllByUserId(userId, pageable);
-        return pagedResourcesAssembler.toModel(reviews, modelAssembler);
+        PagedModel<ReviewModel> page = pagedResourcesAssembler.toModel(reviews, modelAssembler);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/reviews/{id}")
-    public ReviewModel findById(@PathVariable Long id) {
-        return mapper.mapToModel(reviewService.findById(id));
+    public ResponseEntity<ReviewModel> findById(@PathVariable Long id) {
+        ReviewModel reviewModel = mapper.mapToModel(reviewService.findById(id));
+        return ResponseEntity.ok(reviewModel);
     }
 
     @PostMapping("/products/{productId}/reviews")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReviewModel makeReview(
+    public ResponseEntity<ReviewModel> makeReview(
             @AuthenticationPrincipal User user, @PathVariable Long productId,
             @Valid @RequestBody ReviewModel reviewModel) {
         Review review = mapper.mapToEntity(reviewModel);
-        return modelAssembler.toModel(reviewService.makeReview(user.getId(), productId, review));
+        ReviewModel createdReview = modelAssembler.toModel(
+                reviewService.makeReview(user.getId(), productId, review)
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }
 
     @PutMapping("/users/{userId}/reviews/{reviewId}")

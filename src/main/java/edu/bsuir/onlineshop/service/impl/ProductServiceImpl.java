@@ -17,21 +17,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final MessagesSource messages;
 
     @Override
+    @Transactional
     @CachePut(value = "product", key = "#result.id")
     public Product insert(Product product) {
         return productRepository.save(product);
     }
 
     @Override
+    @Transactional
     @CachePut(value = "product", key = "#id")
     public void update(Long id, Product product) {
         Product productToUpdate = productRepository.findById(id)
@@ -46,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     @CacheEvict(value = "product", key = "#id")
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {

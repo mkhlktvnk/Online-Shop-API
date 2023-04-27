@@ -14,6 +14,8 @@ public class MessageKey {
 
     public static final String USER_NOT_FOUND_BY_ID = "user.not-found.by-id";
 
+    public static final String USER_NOT_FOUND_BY_USERNAME = "user.not-found.by-username";
+
     public static final String USER_ALREADY_EXISTS_WITH_USERNAME = "user.already-exists.with-username";
 
     public static final String USER_ALREADY_EXISTS_WITH_EMAIL = "user.already-exists.with-email";
